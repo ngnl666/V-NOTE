@@ -18,7 +18,7 @@
       @click.self="setAnimation(note)"
     >
       <p class="text-white font-thin">標題: {{ note.title }}</p>
-      <span class="myNote__star text-white">
+      <span class="LatestNotes__star text-white">
         <i
           class="far fa-star"
           @click="addStar(note.id, true)"
@@ -31,12 +31,16 @@
 </template>
 
 <script>
-import { reactive, ref, inject, watch, computed, toRefs } from 'vue';
+import { reactive, ref, inject, computed, toRefs } from 'vue';
 import 'animate.css';
 
 export default {
   name: 'LatestNotes',
-  props: ['note'],
+  props: {
+    note: {
+      type: Object,
+    },
+  },
   setup({ note }) {
     // destructor props
     const store = inject('store');
@@ -49,14 +53,6 @@ export default {
       setTimeout(() => (isFade.value = false), 1000);
       setCurrNote(cur);
     };
-
-    watch(
-      () => state.myNotes,
-      v => {
-        localStorage.setItem('stared', JSON.stringify(v));
-      },
-      { deep: true }
-    );
 
     return {
       ...toRefs(state),

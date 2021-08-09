@@ -1,9 +1,14 @@
 <template>
-  <div class="box-border flex flex-col-reverse fixed top-0 right-0 pt-8 pr-16">
-    <LatestNotes v-for="item in getLatestNote" :key="item.id" :note="item" />
+  <div class="home">
+    <div
+      class="box-border flex flex-col-reverse fixed top-0 right-0 pt-8 pr-16"
+    >
+      <LatestNotes v-for="item in getLatestNote" :key="item.id" :note="item" />
+    </div>
+    <Note />
   </div>
-  <Note />
 </template>
+
 <script>
 import { inject, toRefs } from 'vue';
 
@@ -26,3 +31,5 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped></style>

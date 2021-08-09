@@ -80,7 +80,7 @@
 </template>
 
 <script>
-import { reactive, ref, inject, watch, computed, toRefs } from 'vue';
+import { reactive, ref, inject, toRefs } from 'vue';
 
 export default {
   name: 'Note',
@@ -95,6 +95,7 @@ export default {
       title: '',
       content: '',
       stared: false,
+      date: new Date(),
     });
 
     const upload = note => {
