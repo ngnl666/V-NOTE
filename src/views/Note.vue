@@ -27,14 +27,16 @@
             >標題:</label
           >
           <input type="text" class="note__title" v-model="note.title" />
-          <span class="text-red-400 ml-4" v-if="!note.title && isNull"
+          <span class="text-red-400 ml-4" v-if="!note.title.trim() && isNull"
             >*此欄位不能為空</span
           >
         </div>
         <div class="note__body mb-8">
           <div class="note__input-group mb-4">
             <label class="note__label text-gray-400">內文:</label>
-            <span class="text-red-400 ml-4" v-if="!note.content && isNull"
+            <span
+              class="text-red-400 ml-4"
+              v-if="!note.content.trim() && isNull"
               >*此欄位不能為空</span
             >
           </div>
@@ -99,13 +101,12 @@ export default {
     });
 
     const upload = note => {
-      if (!note.title || !note.content) {
+      if (!note.title.trim() || !note.content.trim()) {
         isNull.value = true;
         return;
       }
       uploadNote(note);
-      note.title = '';
-      note.content = '';
+      note.title = note.content = '';
       isOpen.value = !isOpen;
       isNull.value = false;
     };

@@ -10,7 +10,20 @@
     />
 
     <div class="allNote border border-gray-300 rounded-3xl p-8">
-      <h2 class="text-2xl text-gray-400 mb-8">文章列表</h2>
+      <div class="allNote__header flex justify-between mb-8">
+        <h2 class="text-2xl text-gray-400">文章列表</h2>
+        <p
+          class="text-md align-middle text-gray-400 cursor-pointer"
+          @click="timeSort"
+        >
+          照時間順序<span class="ml-2"
+            ><i
+              class="allNote__arrow fas fa-arrow-down"
+              :class="{ 'rotate-180': isRotate }"
+            ></i
+          ></span>
+        </p>
+      </div>
       <hr />
       <div class="border-box">
         <div v-if="!myNotes.length">
@@ -34,7 +47,7 @@
   </div>
 </template>
 <script>
-import { inject, toRefs } from 'vue';
+import { inject, ref, toRefs } from 'vue';
 import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/vue-loading.css';
 
@@ -50,10 +63,18 @@ export default {
     const store = inject('store');
     const { state, setLoading } = store;
 
+    const isRotate = ref(false);
+
+    const timeSort = () => {
+      isRotate.value = !isRotate.value;
+    };
+
     setLoading();
 
     return {
       ...toRefs(state),
+      isRotate,
+      timeSort,
     };
   },
 };
@@ -61,5 +82,9 @@ export default {
 <style lang="scss" scoped>
 .container {
   max-width: 900px;
+}
+.rotate-180 {
+  transform: rotate(180deg);
+  transition: all 0.25s;
 }
 </style>
