@@ -5,6 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
 const state = reactive({
   myNotes: JSON.parse(localStorage.getItem('stared')) || [],
   currNote: {},
+  sorted: false,
   loadingStatus: {
     isLoading: false,
     fullPage: true,
@@ -28,6 +29,14 @@ const addStar = (id, status) => {
     : (state.myNotes.find(item => item.id === id).stared = false);
 };
 
+const isSorted = () =>
+  state.sorted ? (state.sorted = false) : (state.sorted = true);
+
+const deleteMyNote = payload => {
+  console.log(state.myNotes.find(item => item.id === payload).id);
+  // state.myNotes.splice(state.myNotes.find(item => item.id === payload).id, 1);
+};
+
 const setLoading = () => {
   state.loadingStatus.isLoading = true;
   setTimeout(() => (state.loadingStatus.isLoading = false), 1000);
@@ -41,12 +50,30 @@ watch(
   { deep: true }
 );
 
+watch(
+  () => state.sorted,
+  v => {
+    if (v) {
+      return state.myNotes.sort(
+        (a, b) => Date.parse(b.date).valueOf() - Date.parse(a.date).valueOf()
+      );
+    } else {
+      return state.myNotes.sort(
+        (a, b) => Date.parse(a.date).valueOf() - Date.parse(b.date).valueOf()
+      );
+    }
+  },
+  { deep: true }
+);
+
 // actions
 
 export default {
   state: readonly(state),
   uploadNote,
+  deleteMyNote,
   setCurrNote,
   addStar,
+  isSorted,
   setLoading,
 };

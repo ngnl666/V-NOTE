@@ -18,7 +18,7 @@
         >
           照時間順序<span class="ml-2"
             ><i
-              class="allNote__arrow fas fa-arrow-down"
+              class="allNote__arrow fas fa-arrow-up"
               :class="{ 'rotate-180': isRotate }"
             ></i
           ></span>
@@ -61,13 +61,18 @@ export default {
   },
   setup() {
     const store = inject('store');
-    const { state, setLoading } = store;
+    const { state, isSorted, setLoading } = store;
 
     const isRotate = ref(false);
 
     const timeSort = () => {
       isRotate.value = !isRotate.value;
+      isSorted();
     };
+
+    state.myNotes.forEach(item => {
+      console.log(item.title, Date.parse(item.date).valueOf());
+    });
 
     setLoading();
 
