@@ -33,8 +33,12 @@ const isSorted = () =>
   state.sorted ? (state.sorted = false) : (state.sorted = true);
 
 const deleteMyNote = payload => {
-  console.log(state.myNotes.find(item => item.id === payload).id);
-  // state.myNotes.splice(state.myNotes.find(item => item.id === payload).id, 1);
+  console.log(state.myNotes.find(item => item.id === payload));
+  state.myNotes.splice(
+    state.myNotes.find(item => item.id === payload),
+    1
+  );
+  console.log(typeof state.myNotes);
 };
 
 const setLoading = () => {

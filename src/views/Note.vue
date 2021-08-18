@@ -20,6 +20,7 @@
         >
           <i class="fas fa-plus"></i>
         </button>
+        <button @click="generateNote">generate</button>
       </div>
       <div class="note border border-gray-300 rounded-3xl p-8" v-else>
         <div class="note__header mb-8">
@@ -111,12 +112,42 @@ export default {
       isNull.value = false;
     };
 
+    // dev
+    const generateNote = () => {
+      for (let i = 0; i < 10; i++) {
+        setTimeout(() => {
+          if (i % 2 === 0) {
+            uploadNote(
+              reactive({
+                title: `TEST${i + 1}`,
+                content:
+                  '1. 對照 excel (左皮右機)，先橘在黃 2. 建立虛擬機(新d槽/baseVM/Less14) - 三個 e 槽皆相同(接less-xx) - less-xx/hardDisk/ - 改虛擬機名字 3. 開機 - 新增d槽 - 查ip - 回遠端桌面輸入網址 4. nodepad++ C:/xampp/apache/conf/httpd.conf - 調整讀檔順序 5. 重啟 xampp 6. 建立虛擬機(新d槽/baseVM/Less14) - 三個 e 槽皆相同(接less-xx)',
+                stared: false,
+                date: new Date(),
+              })
+            );
+          } else {
+            uploadNote(
+              reactive({
+                title: `TEST${i + 1}`,
+                content:
+                  'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Doloribus vero voluptatem harum, quos dignissimos consequatur fugit nesciunt aperiam perferendis rerum provident perspiciatis illo temporibus tenetur atque ex voluptatibus rem saepe qui iure. Unde reprehenderit impedit omnis? Totam dolores, accusantium blanditiis, repellat pariatur maxime perferendis necessitatibus impedit ipsa soluta corporis quia.',
+                stared: false,
+                date: new Date(),
+              })
+            );
+          }
+        }, 1000 * i);
+      }
+    };
+
     return {
       ...toRefs(state),
       note,
       isOpen,
       isNull,
       upload,
+      generateNote,
     };
   },
 };
