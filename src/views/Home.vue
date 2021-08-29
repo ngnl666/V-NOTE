@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="home dark:bg-gray-800">
     <div
       class="box-border flex flex-col-reverse fixed top-0 right-0 pt-8 pr-16"
     >

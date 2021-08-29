@@ -1,3 +1,28 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+input {
+  width: 18rem;
+  height: 2.5rem;
+  border: 1px solid #c0c0c0;
+  border-radius: 1rem;
+  padding-left: 0.8rem;
+}
+input:focus {
+  border: 2px solid #42b883;
+  outline: none;
+}
+
+textarea {
+  width: 85%;
+  height: 35rem;
+  border: 1px solid #c0c0c0;
+  border-radius: 1rem;
+  resize: none;
+  padding: 0.8rem 0 0 0.8rem;
+}
+textarea:focus {
+  border: 2px solid #42b883;
+  outline: none;
+}

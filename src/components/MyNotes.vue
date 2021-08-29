@@ -1,7 +1,7 @@
 <template>
   <div class="container box-border cursor-pointer p-4 hover:bg-gray-200">
     <div class="myNote__header flex justify-between px-6 mb-6">
-      <h3 class="text-xl">{{ myNote.title }}</h3>
+      <h3 class="text-xl" v-html="highLight(myNote.title)"></h3>
       <div class="LatestNotes__icon">
         <span class="LatestNotes__edit hover:bg-gray-200 px-2">
           <i class="fas fa-edit"></i>
@@ -22,21 +22,45 @@
         </span>
       </div>
     </div>
-    <div class="myNote__body px-6">
-      <section class="break-words text-gray-500">
-        {{ tempContent }}
-        <span class="underline">閱讀更多</span>
-      </section>
-    </div>
-    <div class="myNote__footer text-right text-gray-500 mb-4">
-      2021/08/10 12:00:00
-    </div>
-    <hr />
+    <router-link :to="`/current/view/${myNote.id}`">
+      <div class="myNote__body px-6 mb-8">
+        <section
+          class="break-words text-gray-500"
+          v-html="highLight(tempContent)"
+        ></section>
+      </div>
+      <div class="myNote__footer flex justify-between my-4">
+        <div class="myNote__tags">
+          <ul class="flex">
+            <li
+              class="
+                bg-gray-200
+                rounded-md
+                text-white
+                px-2
+                py-0.5
+                mr-4
+                hover:bg-black
+              "
+              v-for="tag in myNote.tags"
+              :key="tag.id"
+              @click.prevent="searchTag(tag)"
+            >
+              # {{ tag }}
+            </li>
+          </ul>
+        </div>
+        <div class="myNote__cratetime">
+          {{ getTime(myNote.date) }}
+        </div>
+      </div>
+      <hr />
+    </router-link>
   </div>
 </template>
 
 <script>
-import { inject, ref, onMounted, reactive } from 'vue';
+import { inject, ref } from 'vue';
 
 export default {
   name: 'MyNotes',
@@ -47,20 +71,35 @@ export default {
   },
   setup({ myNote }) {
     const store = inject('store');
-    const { addStar, deleteMyNote } = store;
+    const { state, addStar, deleteMyNote, getTime, setKeyword } = store;
 
     let tempContent = ref('');
 
-    tempContent.value = `${myNote.content.substring(0, 200)}．．．`;
+    tempContent.value = `${myNote.content.substring(0, 200)}．．．閱讀更多`;
+
+    const highLight = val =>
+      val.replace(
+        new RegExp(state.keyword, 'g'),
+        `<span class="text-red-400">${state.keyword}</span>`
+      );
+
+    const searchTag = tag => setKeyword(`#${tag}`);
 
     return {
       myNote,
       addStar,
       deleteMyNote,
       tempContent,
+      getTime,
+      highLight,
+      searchTag,
     };
   },
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.highlight {
+  color: #f08d49;
+}
+</style>

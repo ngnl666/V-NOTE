@@ -11,6 +11,21 @@ const routes = [
     name: 'all',
     component: () => import('@/views/AllNote.vue'),
   },
+  {
+    path: '/current',
+    name: 'current',
+    component: () => import('@/views/CurrentNote.vue'),
+    children: [
+      {
+        path: 'view/:id',
+        component: () => import('@/components/View.vue'),
+      },
+      {
+        path: 'edit/:id',
+        component: () => import('@/components/Edit.vue'),
+      },
+    ],
+  },
 ];
 
 const router = createRouter({

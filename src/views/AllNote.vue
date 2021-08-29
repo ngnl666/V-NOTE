@@ -12,9 +12,34 @@
     <div class="allNote border border-gray-300 rounded-3xl p-8">
       <div class="allNote__header flex justify-between mb-8">
         <h2 class="text-2xl text-gray-400">文章列表</h2>
+        <span class="allNote__searchInput relative">
+          <input
+            type="text"
+            class="
+              allNote__searchBar
+              border border-gray-200
+              rounded-3xl
+              text-gray-400 text-center
+              placeholder-gray-300
+              px-16
+              py-2
+            "
+            placeholder="請輸入關鍵字"
+            v-model="currKeyword"
+          />
+          <span
+            class="text-xl absolute right-3 pt-1.5"
+            :class="{
+              'text-gray-400': currKeyword,
+              'text-gray-300': !currKeyword,
+            }"
+            @click="clearInput()"
+            ><i class="far fa-times-circle"></i
+          ></span>
+        </span>
         <p
           class="text-md align-middle text-gray-400 cursor-pointer"
-          @click="timeSort"
+          @click="timeSort()"
         >
           照時間順序<span class="ml-2"
             ><i
@@ -41,13 +66,13 @@
           </p>
         </div>
 
-        <MyNotes v-for="item in myNotes" :key="item.id" :myNote="item" />
+        <MyNotes v-for="item in filteredNote" :key="item.id" :myNote="item" />
       </div>
     </div>
   </div>
 </template>
 <script>
-import { inject, ref, toRefs } from 'vue';
+import { computed, inject, ref, onMounted, toRefs } from 'vue';
 import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/vue-loading.css';
 
@@ -61,33 +86,48 @@ export default {
   },
   setup() {
     const store = inject('store');
-    const { state, isSorted, setLoading } = store;
+    const { state, SortMyNotes, setKeyword, setLoading } = store;
 
-    const isRotate = ref(false);
+    const isRotate = ref(true);
 
     const timeSort = () => {
       isRotate.value = !isRotate.value;
-      isSorted();
+      SortMyNotes(isRotate.value);
     };
 
-    state.myNotes.forEach(item => {
-      console.log(item.title, Date.parse(item.date).valueOf());
+    const currKeyword = computed({
+      get() {
+        return state.keyword;
+      },
+      set(value) {
+        return setKeyword(value);
+      },
     });
 
+    const clearInput = () => setKeyword('');
+
     setLoading();
+
+    onMounted(() => {
+      SortMyNotes(isRotate.value);
+    });
 
     return {
       ...toRefs(state),
       isRotate,
+      currKeyword,
+      clearInput,
       timeSort,
     };
   },
 };
 </script>
+
 <style lang="scss" scoped>
 .container {
   max-width: 900px;
 }
+
 .rotate-180 {
   transform: rotate(180deg);
   transition: all 0.25s;

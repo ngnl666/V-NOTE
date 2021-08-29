@@ -24,13 +24,62 @@
       </div>
       <div class="note border border-gray-300 rounded-3xl p-8" v-else>
         <div class="note__header mb-8">
-          <label class="note__label text-gray-400 align-middle mr-4"
-            >標題:</label
-          >
-          <input type="text" class="note__title" v-model="note.title" />
-          <span class="text-red-400 ml-4" v-if="!note.title.trim() && isNull"
-            >*此欄位不能為空</span
-          >
+          <div class="note__titleGroup mb-6">
+            <label
+              class="note__label text-gray-400 align-middle mr-4"
+              for="note__title--input"
+              >標題:</label
+            >
+            <input
+              type="text"
+              class="note__title"
+              id="note__title--input"
+              maxlength="15"
+              autocomplete="off"
+              v-model="note.title"
+            />
+            <span class="text-red-400 ml-4" v-if="!note.title.trim() && isNull"
+              >*此欄位不能為空</span
+            >
+          </div>
+          <div class="note__tagInputGroup mb-4">
+            <label
+              class="note__label text-gray-400 align-middle mr-4"
+              for="note__tags--input"
+              >Tags:</label
+            >
+            <span class="note__tagInput relative">
+              <input
+                type="text"
+                class="note__title"
+                id="note__tags--input"
+                maxlength="10"
+                autocomplete="off"
+                v-model="tag"
+                @keyup.enter="addTags()"
+              />
+              <span
+                class="text-2xl text-green-400 absolute right-3 pt-1"
+                @click="addTags()"
+                ><i class="fas fa-arrow-alt-circle-right"></i
+              ></span>
+              <div class="text-red-400 ml-4" v-if="note.tags.length === 5">
+                *最多同時擁有 5 個 tag
+              </div>
+            </span>
+          </div>
+
+          <div class="note__tags">
+            <ul class="flex flex-wrap">
+              <li
+                class="bg-gray-200 rounded-md text-white px-2 py-0.5 mr-4"
+                v-for="tag in note.tags"
+                :key="note.id"
+              >
+                # {{ tag }}
+              </li>
+            </ul>
+          </div>
         </div>
         <div class="note__body mb-8">
           <div class="note__input-group mb-4">
@@ -93,13 +142,21 @@ export default {
 
     let isOpen = ref(false);
     let isNull = ref(false);
+    let tag = ref('');
 
     const note = reactive({
       title: '',
       content: '',
+      tags: [],
       stared: false,
-      date: new Date(),
     });
+
+    const addTags = () => {
+      if (tag.value.trim() !== '' && note.tags.length < 5) {
+        note.tags.push(tag.value);
+        tag.value = '';
+      }
+    };
 
     const upload = note => {
       if (!note.title.trim() || !note.content.trim()) {
@@ -122,6 +179,7 @@ export default {
                 title: `TEST${i + 1}`,
                 content:
                   '1. 對照 excel (左皮右機)，先橘在黃 2. 建立虛擬機(新d槽/baseVM/Less14) - 三個 e 槽皆相同(接less-xx) - less-xx/hardDisk/ - 改虛擬機名字 3. 開機 - 新增d槽 - 查ip - 回遠端桌面輸入網址 4. nodepad++ C:/xampp/apache/conf/httpd.conf - 調整讀檔順序 5. 重啟 xampp 6. 建立虛擬機(新d槽/baseVM/Less14) - 三個 e 槽皆相同(接less-xx)',
+                tags: ['123', '456', '789'],
                 stared: false,
                 date: new Date(),
               })
@@ -132,6 +190,7 @@ export default {
                 title: `TEST${i + 1}`,
                 content:
                   'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Doloribus vero voluptatem harum, quos dignissimos consequatur fugit nesciunt aperiam perferendis rerum provident perspiciatis illo temporibus tenetur atque ex voluptatibus rem saepe qui iure. Unde reprehenderit impedit omnis? Totam dolores, accusantium blanditiis, repellat pariatur maxime perferendis necessitatibus impedit ipsa soluta corporis quia.',
+                tags: ['111', '222', '333'],
                 stared: false,
                 date: new Date(),
               })
@@ -143,9 +202,11 @@ export default {
 
     return {
       ...toRefs(state),
+      tag,
       note,
       isOpen,
       isNull,
+      addTags,
       upload,
       generateNote,
     };
@@ -154,33 +215,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-input {
-  width: 18rem;
-  height: 2.5rem;
-  border: 1px solid #c0c0c0;
-  border-radius: 1rem;
-  padding-left: 0.8rem;
-
-  &:focus {
-    border: 2px solid #42b883;
-    outline: none;
-  }
-}
-
-textarea {
-  width: 85%;
-  height: 35rem;
-  border: 1px solid #c0c0c0;
-  border-radius: 1rem;
-  resize: none;
-  padding: 0.8rem 0 0 0.8rem;
-
-  &:focus {
-    border: 2px solid #42b883;
-    outline: none;
-  }
-}
-
 .container {
   max-width: 900px;
 }

@@ -15,9 +15,11 @@
         p-4
       "
       :class="{ fade: isFade }"
-      @click.self="setAnimation(note)"
+      @click.self="goToNote(note.id)"
     >
-      <p class="text-white font-thin">標題: {{ note.title }}</p>
+      <p class="text-white font-extralight" @click.self="goToNote(note.id)">
+        標題: {{ note.title }}
+      </p>
       <span class="LatestNotes__star text-white">
         <i
           class="far fa-star"
@@ -31,7 +33,8 @@
 </template>
 
 <script>
-import { reactive, ref, inject, computed, toRefs } from 'vue';
+import { ref, inject, toRefs } from 'vue';
+import { useRouter } from 'vue-router';
 import 'animate.css';
 
 export default {
@@ -44,14 +47,17 @@ export default {
   setup({ note }) {
     // destructor props
     const store = inject('store');
-    const { state, addStar, setCurrNote } = store;
+    const { state, addStar } = store;
 
+    const router = useRouter();
     const isFade = ref(false);
 
-    const setAnimation = cur => {
+    const goToNote = id => {
       isFade.value = true;
-      setTimeout(() => (isFade.value = false), 1000);
-      setCurrNote(cur);
+      setTimeout(() => {
+        isFade.value = false;
+        router.push({ path: `/current/view/${id}` });
+      }, 1000);
     };
 
     return {
@@ -59,7 +65,7 @@ export default {
       isFade,
       addStar,
       note,
-      setAnimation,
+      goToNote,
     };
   },
 };
