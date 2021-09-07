@@ -2,27 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
-input {
-  width: 18rem;
-  height: 2.5rem;
-  border: 1px solid #c0c0c0;
-  border-radius: 1rem;
-  padding-left: 0.8rem;
-}
-input:focus {
-  border: 2px solid #42b883;
-  outline: none;
-}
+@layer components {
+  .input-focus {
+    @apply focus:border-2 focus:border-green-400 focus:outline-none;
+  }
 
-textarea {
-  width: 85%;
-  height: 35rem;
-  border: 1px solid #c0c0c0;
-  border-radius: 1rem;
-  resize: none;
-  padding: 0.8rem 0 0 0.8rem;
-}
-textarea:focus {
-  border: 2px solid #42b883;
-  outline: none;
+  input {
+    @apply w-72 h-10 border border-gray-300 rounded-2xl pl-3.5 input-focus;
+  }
+
+  textarea {
+    @apply w-10/12 h-35 border border-gray-300 rounded-2xl resize-none pt-3.5 pl-3.5 input-focus;
+  }
 }

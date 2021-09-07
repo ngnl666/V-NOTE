@@ -5,6 +5,11 @@ module.exports = {
   purge: ['index.html', './src/**/*.{js,jsx,ts,tsx,vue,html}'],
   presets: [],
   darkMode: 'class', // or 'media' or 'class'
+  variants: {
+    extend: {
+      borderWidth: ['focus'],
+    },
+  },
   theme: {
     screens: {
       sm: '640px',
@@ -443,6 +448,7 @@ module.exports = {
       '3/6': '50%',
       '4/6': '66.666667%',
       '5/6': '83.333333%',
+      35: '35rem',
       full: '100%',
       screen: '100vh',
     }),

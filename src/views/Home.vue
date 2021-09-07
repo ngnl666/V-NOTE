@@ -1,7 +1,7 @@
 <template>
-  <div class="home dark:bg-gray-800">
+  <div class="home">
     <div
-      class="box-border flex flex-col-reverse fixed top-0 right-0 pt-8 pr-16"
+      class="box-border flex flex-col-reverse fixed top-0 right-0 pt-16 pr-16"
     >
       <LatestNotes v-for="item in getLatestNote" :key="item.id" :note="item" />
     </div>
@@ -31,5 +31,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss" scoped></style>

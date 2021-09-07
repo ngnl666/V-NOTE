@@ -4,17 +4,16 @@
       <div class="mx-auto flex justify-center" v-if="!isOpen">
         <button
           class="
-            bg-green-500
+            bg-green-400
             transition
             duration-500
-            hover:bg-green-400
             text-white text-xl
             font-bold
+            border-b-8 border-green-700
+            rounded
             py-4
             px-6
-            border-b-8 border-green-700
-            hover:border-green-500
-            rounded
+            hover:bg-green-300 hover:border-green-500
           "
           @click="isOpen = !isOpen"
         >
@@ -26,7 +25,13 @@
         <div class="note__header mb-8">
           <div class="note__titleGroup mb-6">
             <label
-              class="note__label text-gray-400 align-middle mr-4"
+              class="
+                note__label
+                text-gray-400
+                align-middle
+                mr-4
+                dark:text-white
+              "
               for="note__title--input"
               >標題:</label
             >
@@ -44,7 +49,13 @@
           </div>
           <div class="note__tagInputGroup mb-4">
             <label
-              class="note__label text-gray-400 align-middle mr-4"
+              class="
+                note__label
+                text-gray-400
+                align-middle
+                mr-4
+                dark:text-white
+              "
               for="note__tags--input"
               >Tags:</label
             >
@@ -72,7 +83,15 @@
           <div class="note__tags">
             <ul class="flex flex-wrap">
               <li
-                class="bg-gray-200 rounded-md text-white px-2 py-0.5 mr-4"
+                class="
+                  bg-gray-200
+                  rounded-md
+                  text-white
+                  px-2
+                  py-0.5
+                  mr-4
+                  dark:bg-gray-400
+                "
                 v-for="tag in note.tags"
                 :key="note.id"
               >
@@ -83,7 +102,9 @@
         </div>
         <div class="note__body mb-8">
           <div class="note__input-group mb-4">
-            <label class="note__label text-gray-400">內文:</label>
+            <label class="note__label text-gray-400 dark:text-white"
+              >內文:</label
+            >
             <span
               class="text-red-400 ml-4"
               v-if="!note.content.trim() && isNull"
@@ -98,13 +119,14 @@
               note__cancel-btn
               bg-transparent
               border border-red-700
-              hover:bg-red-700 hover:text-white
               text-red-700
               font-bold
               rounded
               py-2
               px-6
               mr-4
+              hover:bg-red-700 hover:text-white
+              dark:text-white
             "
             @click="isOpen = !isOpen"
           >
@@ -113,13 +135,13 @@
           <button
             class="
               note__upload-btn
-              bg-green-500
-              hover:bg-green-700
+              bg-green-400
               text-white
               font-bold
               rounded
               py-2
               px-6
+              hover:bg-green-500
             "
             @click="upload(note)"
           >

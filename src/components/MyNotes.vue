@@ -1,13 +1,22 @@
 <template>
-  <div class="container box-border cursor-pointer p-4 hover:bg-gray-200">
+  <div
+    class="
+      container
+      box-border
+      cursor-pointer
+      p-4
+      hover:bg-gray-200
+      dark:hover:bg-transparent
+    "
+  >
     <div class="myNote__header flex justify-between px-6 mb-6">
-      <h3 class="text-xl" v-html="highLight(myNote.title)"></h3>
+      <h3 class="text-xl dark:text-white" v-html="highLight(myNote.title)"></h3>
       <div class="LatestNotes__icon">
-        <span class="LatestNotes__edit hover:bg-gray-200 px-2">
+        <span class="LatestNotes__edit px-2 hover:bg-gray-200 dark:text-white">
           <i class="fas fa-edit"></i>
         </span>
         <span
-          class="LatestNotes__edit hover:bg-gray-200 px-2"
+          class="LatestNotes__edit px-2 hover:bg-gray-200 dark:text-white"
           @click="deleteMyNote(myNote.id)"
         >
           <i class="far fa-trash-alt"></i>
@@ -25,7 +34,7 @@
     <router-link :to="`/current/view/${myNote.id}`">
       <div class="myNote__body px-6 mb-8">
         <section
-          class="break-words text-gray-500"
+          class="break-words text-gray-500 dark:text-gray-400"
           v-html="highLight(tempContent)"
         ></section>
       </div>
@@ -41,6 +50,7 @@
                 py-0.5
                 mr-4
                 hover:bg-black
+                dark:bg-gray-400 dark:hover:bg-black
               "
               v-for="tag in myNote.tags"
               :key="tag.id"
@@ -50,7 +60,7 @@
             </li>
           </ul>
         </div>
-        <div class="myNote__cratetime">
+        <div class="myNote__cratetime dark:text-white">
           {{ getTime(myNote.date) }}
         </div>
       </div>
@@ -97,9 +107,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss" scoped>
-.highlight {
-  color: #f08d49;
-}
-</style>

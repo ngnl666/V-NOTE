@@ -11,13 +11,13 @@
 
     <div class="allNote border border-gray-300 rounded-3xl p-8">
       <div class="allNote__header flex justify-between mb-8">
-        <h2 class="text-2xl text-gray-400">文章列表</h2>
+        <h2 class="text-2xl text-gray-400 dark:text-white">文章列表</h2>
         <span class="allNote__searchInput relative">
           <input
             type="text"
             class="
               allNote__searchBar
-              border border-gray-200
+              input-focus
               rounded-3xl
               text-gray-400 text-center
               placeholder-gray-300
@@ -38,7 +38,13 @@
           ></span>
         </span>
         <p
-          class="text-md align-middle text-gray-400 cursor-pointer"
+          class="
+            text-md
+            align-middle
+            text-gray-400
+            cursor-pointer
+            dark:text-white
+          "
           @click="timeSort()"
         >
           照時間順序<span class="ml-2"
@@ -52,7 +58,7 @@
       <hr />
       <div class="border-box">
         <div v-if="!myNotes.length">
-          <p class="text-3xl text-bold text-center py-8">
+          <p class="text-3xl text-bold text-center py-8 dark:text-white">
             目前還沒有發表任何文章喔!
           </p>
           <p
@@ -60,6 +66,7 @@
               text-center text-xl text-gray-400
               underline
               hover:text-green-400
+              dark:text-white
             "
           >
             <router-link to="/">回首頁</router-link>

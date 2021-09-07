@@ -1,14 +1,14 @@
 <template>
   <div class="container box-border px-4">
     <div class="view__header mb-8">
-      <h3 class="text-3xl">
+      <h3 class="text-3xl dark:text-white">
         {{ currNote.title }}
       </h3>
       <p class="text-gray-400 font-extralight mt-4">
         {{ getTime(currNote.date) }}
       </p>
     </div>
-    <div class="view__body font-light tracking-wide leading-8">
+    <div class="view__body font-light tracking-wide leading-8 dark:text-white">
       {{ currNote.content }}
     </div>
   </div>
@@ -35,5 +35,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss" scoped></style>

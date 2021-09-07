@@ -71,6 +71,13 @@ const getTime = t =>
 
 const setKeyword = payload => (state.keyword = payload);
 
+const setDarkMode = payload => {
+  payload
+    ? document.documentElement.classList.add('dark')
+    : document.documentElement.classList.toggle('dark');
+  localStorage.setItem('darkmode', payload);
+};
+
 const setLoading = () => {
   state.loadingStatus.isLoading = true;
   setTimeout(() => (state.loadingStatus.isLoading = false), 1000);
@@ -97,6 +104,7 @@ export default {
   SortMyNotes,
   getTime,
   setKeyword,
+  setDarkMode,
   setLoading,
   fetchCurrNote,
 };

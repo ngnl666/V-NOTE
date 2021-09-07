@@ -13,6 +13,7 @@
         rounded-xl
         shadow-xl
         p-4
+        hover:scale-125 hover:duration-300 hover:my-4
       "
       :class="{ fade: isFade }"
       @click.self="goToNote(note.id)"
@@ -72,15 +73,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.LatestNotes {
-  &:hover {
-    transform: scale(1.35);
-    transition: 0.25s;
-    margin: 1rem 0;
-  }
-}
-
-// animation
 @keyframes fadeout {
   20% {
     transform: translate(-10%, 0%);
