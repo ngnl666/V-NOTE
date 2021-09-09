@@ -1,17 +1,30 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@tailwind variants;
 
 @layer components {
-  .input-focus {
-    @apply focus:border-2 focus:border-green-400 focus:outline-none;
-  }
-
   input {
     @apply w-72 h-10 border border-gray-300 rounded-2xl pl-3.5 input-focus;
   }
 
   textarea {
     @apply w-10/12 h-35 border border-gray-300 rounded-2xl resize-none pt-3.5 pl-3.5 input-focus;
+  }
+  
+  .input-focus {
+    @apply focus:border-2 focus:border-green-400 focus:outline-none;
+  }
+
+  .homeBtn {
+    @apply text-xl text-gray-400 underline hover:text-green-400 dark:hover:text-green-400 dark:text-white;
+  }
+
+  .reminder {
+    @apply text-3xl font-bold py-8 dark:text-white;
+  }
+
+  .nextPageBtn {
+    @apply h-48 text-5xl text-gray-400/50 flex items-center hover:text-gray-500/70 dark:hover:text-gray-200/70;
   }
 }

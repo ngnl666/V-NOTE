@@ -1,17 +1,17 @@
 <template>
-  <div class="container box-border px-4">
-    <div class="view__header mb-8">
-      <h3 class="text-3xl dark:text-white">
-        {{ currNote.title }}
-      </h3>
-      <p class="text-gray-400 font-extralight mt-4">
-        {{ getTime(currNote.date) }}
-      </p>
+    <div class="px-4">
+        <div class="mb-8">
+            <h3 class="text-3xl dark:text-white">
+                {{ currNote.title }}
+            </h3>
+            <p class="text-gray-400 font-extralight mt-4">
+                {{ getTime(currNote.date) }}
+            </p>
+        </div>
+        <div class="font-light tracking-wide leading-8 dark:text-white">
+            {{ currNote.content }}
+        </div>
     </div>
-    <div class="view__body font-light tracking-wide leading-8 dark:text-white">
-      {{ currNote.content }}
-    </div>
-  </div>
 </template>
 
 <script>
@@ -19,19 +19,19 @@ import { inject, ref, toRefs } from 'vue';
 import { useRoute } from 'vue-router';
 
 export default {
-  name: 'View',
-  setup() {
-    const store = inject('store');
-    const { state, fetchCurrNote, getTime } = store;
+    name: 'View',
+    setup() {
+        const store = inject('store');
+        const { state, fetchCurrNote, getTime } = store;
 
-    const route = useRoute();
+        const route = useRoute();
 
-    fetchCurrNote(route.params.id);
+        fetchCurrNote(route.params.id);
 
-    return {
-      ...toRefs(state),
-      getTime,
-    };
-  },
+        return {
+            ...toRefs(state),
+            getTime,
+        };
+    },
 };
 </script>
