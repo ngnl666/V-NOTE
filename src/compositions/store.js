@@ -8,6 +8,8 @@ const state = reactive({
     currNote: {},
     isSort: false,
     keyword: '',
+    nextPageId: '',
+    hasNextPage: [true, true],
     loadingStatus: {
         isLoading: false,
         fullPage: true,
@@ -78,6 +80,26 @@ const setLoading = () => {
     setTimeout(() => (state.loadingStatus.isLoading = false), 1000);
 };
 
+const nextPage = status => {
+    for (let i in state.myNotes) {
+        if (state.myNotes[i].id === state.currNote.id) {
+            console.log(+i);
+            if (+i === 0) {
+                hasNextPage[0] = false;
+                return;
+            }
+            if (+i === state.myNotes.length - 1) {
+                hasNextPage[1] = false;
+                return;
+            }
+            status === -1
+                ? (state.nextPageId = state.myNotes[i - 1].id)
+                : (state.nextPageId = state.myNotes[+i + 1].id);
+            break;
+        }
+    }
+};
+
 watch(
     () => state.myNotes,
     v => {
@@ -86,28 +108,17 @@ watch(
     { deep: true }
 );
 
+watch(
+    () => state.nextPageId,
+    v => fetchCurrNote(v)
+);
+
 // actions
 const fetchCurrNote = id => {
     state.currNote = state.myNotes.find(item => item.id === id);
     if (!state.currNote) {
         state.currNote = state.myNotes[0];
         router.push({ name: 'all' });
-    }
-};
-
-const nextPage = status => {
-    let index = 0;
-    for (let i in state.myNotes) {
-        if (state.myNotes[i].id === state.currNote.id) {
-            index = i;
-            break;
-        }
-    }
-
-    if (status === -1) {
-        // find state.myNotes[index-1]
-    } else {
-        // find state.myNotes[index+1]
     }
 };
 

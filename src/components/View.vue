@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import { inject, ref, toRefs } from 'vue';
+import { inject, watch, toRefs } from 'vue';
 import { useRoute } from 'vue-router';
 
 export default {

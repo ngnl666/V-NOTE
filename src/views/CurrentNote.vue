@@ -8,11 +8,15 @@
             :loader="loadingStatus.loader"
             :color="loadingStatus.color"
         />
-        <div class="nextPageBtn" @click="nextPage(-1)"><i class="fas fa-chevron-left"></i></div>
+        <div class="nextPageBtn" :class="{ hidden: !hasNextPage[0] }" @click="nextPage(-1)">
+            <i class="fas fa-chevron-left"></i>
+        </div>
         <div class="border border-gray-300 rounded-3xl p-8">
             <router-view> </router-view>
         </div>
-        <div class="nextPageBtn" @click="nextPage(1)"><i class="fas fa-chevron-right"></i></div>
+        <div class="nextPageBtn" :class="{ hidden: !hasNextPage[1] }" @click="nextPage(1)">
+            <i class="fas fa-chevron-right"></i>
+        </div>
     </div>
 </template>
 
