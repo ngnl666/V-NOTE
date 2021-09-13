@@ -19,9 +19,12 @@ const state = reactive({
     },
 
     // getters
-    getLatestNote: computed(() =>
-        state.myNotes.sort((a, b) => Date.parse(b.date).valueOf() - Date.parse(a.date).valueOf()).slice(0, 7)
-    ),
+    getLatestNote: computed(() => {
+        return state.myNotes
+            .slice()
+            .sort((a, b) => Date.parse(b.date).valueOf() - Date.parse(a.date).valueOf())
+            .slice(0, 7);
+    }),
 
     filteredNote: computed(() =>
         state.myNotes.filter(item => {
@@ -80,23 +83,42 @@ const setLoading = () => {
     setTimeout(() => (state.loadingStatus.isLoading = false), 1000);
 };
 
+const resetHasNextPage = () => {
+    let id = state.myNotes.findIndex(item => item.id === state.currNote.id);
+    if (id === 0) {
+        state.hasNextPage[0] = false;
+    } else if (id === state.myNotes.length - 1) {
+        state.hasNextPage[1] = false;
+    } else {
+        state.hasNextPage = [true, true];
+    }
+};
+
 const nextPage = status => {
-    for (let i in state.myNotes) {
+    for (let i = 0; i < state.myNotes.length; i++) {
         if (state.myNotes[i].id === state.currNote.id) {
-            console.log(+i);
-            if (+i === 0) {
-                hasNextPage[0] = false;
+            if (status === -1 && state.myNotes[i - 1]?.id) {
+                state.hasNextPage[1] = true;
+                i === 1 ? (state.hasNextPage[0] = false) : (state.hasNextPage[0] = true);
+                state.nextPageId = state.myNotes[i - 1].id;
                 return;
             }
-            if (+i === state.myNotes.length - 1) {
-                hasNextPage[1] = false;
+            if (status === 1 && state.myNotes[i + 1]?.id) {
+                state.hasNextPage[0] = true;
+                i === state.myNotes.length - 2 ? (state.hasNextPage[1] = false) : (state.hasNextPage[1] = true);
+                state.nextPageId = state.myNotes[i + 1].id;
                 return;
             }
-            status === -1
-                ? (state.nextPageId = state.myNotes[i - 1].id)
-                : (state.nextPageId = state.myNotes[+i + 1].id);
-            break;
         }
+    }
+};
+
+// actions
+const fetchCurrNote = id => {
+    state.currNote = state.myNotes.find(item => item.id === id);
+    if (!state.currNote) {
+        state.currNote = state.myNotes[0];
+        router.push({ name: 'all' });
     }
 };
 
@@ -113,15 +135,6 @@ watch(
     v => fetchCurrNote(v)
 );
 
-// actions
-const fetchCurrNote = id => {
-    state.currNote = state.myNotes.find(item => item.id === id);
-    if (!state.currNote) {
-        state.currNote = state.myNotes[0];
-        router.push({ name: 'all' });
-    }
-};
-
 export default {
     state: readonly(state),
     uploadNote,
@@ -132,6 +145,7 @@ export default {
     setKeyword,
     setDarkMode,
     setLoading,
+    resetHasNextPage,
     fetchCurrNote,
     nextPage,
 };

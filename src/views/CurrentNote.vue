@@ -8,20 +8,20 @@
             :loader="loadingStatus.loader"
             :color="loadingStatus.color"
         />
-        <div class="nextPageBtn" :class="{ hidden: !hasNextPage[0] }" @click="nextPage(-1)">
+        <div class="nextPageBtn" :class="{ invisible: !hasNextPage[0] }" @click="nextPage(-1)">
             <i class="fas fa-chevron-left"></i>
         </div>
-        <div class="border border-gray-300 rounded-3xl p-8">
+        <div class="max-w-[820px] border border-gray-300 rounded-3xl p-8">
             <router-view> </router-view>
         </div>
-        <div class="nextPageBtn" :class="{ hidden: !hasNextPage[1] }" @click="nextPage(1)">
+        <div class="nextPageBtn" :class="{ invisible: !hasNextPage[1] }" @click="nextPage(1)">
             <i class="fas fa-chevron-right"></i>
         </div>
     </div>
 </template>
 
 <script>
-import { inject, toRefs } from 'vue';
+import { onMounted, inject, toRefs } from 'vue';
 import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/vue-loading.css';
 
@@ -32,9 +32,11 @@ export default {
     },
     setup() {
         const store = inject('store');
-        const { state, nextPage, setLoading } = store;
+        const { state, nextPage, resetHasNextPage, setLoading } = store;
 
         setLoading();
+
+        onMounted(() => resetHasNextPage());
 
         return {
             ...toRefs(state),

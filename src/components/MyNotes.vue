@@ -2,21 +2,7 @@
     <div class="cursor-pointer p-4 hover:bg-gray-200 dark:hover:bg-transparent">
         <div class="flex justify-between px-6 mb-6">
             <h3 class="text-xl dark:text-white" v-html="highLight(myNote.title)"></h3>
-            <div class="space-x-4">
-                <span class="hover:text-gray-500 dark:hover:text-gray-400 dark:text-white">
-                    <i class="fas fa-edit"></i>
-                </span>
-                <span
-                    class="hover:text-gray-500 dark:hover:text-gray-400 dark:text-white"
-                    @click="deleteMyNote(myNote.id)"
-                >
-                    <i class="far fa-trash-alt"></i>
-                </span>
-                <span class="text-yellow-400">
-                    <i class="far fa-star" @click="addStar(myNote.id, true)" v-if="!myNote.stared"></i>
-                    <i class="fas fa-star" @click="addStar(myNote.id, false)" v-else></i>
-                </span>
-            </div>
+            <NoteTopBar :myNote="myNote" />
         </div>
         <router-link :to="`/current/view/${myNote.id}`">
             <div class="px-6 mb-8">
@@ -54,12 +40,19 @@
 <script>
 import { inject, ref } from 'vue';
 
+import NoteTopBar from '@/components/NoteTopBar.vue';
+import Modal from '@/components/Modal.vue';
+
 export default {
     name: 'MyNotes',
     props: {
         myNote: {
             type: Object,
         },
+    },
+    components: {
+        NoteTopBar,
+        Modal,
     },
     setup({ myNote }) {
         const store = inject('store');
@@ -76,8 +69,6 @@ export default {
 
         return {
             myNote,
-            addStar,
-            deleteMyNote,
             tempContent,
             getTime,
             highLight,

@@ -12,6 +12,12 @@ const routes = [
         component: () => import('@/views/AllNote.vue'),
     },
     {
+        // for dev
+        path: '/modal',
+        name: 'modal',
+        component: () => import('@/components/Modal.vue'),
+    },
+    {
         path: '/current',
         name: 'current',
         component: () => import('@/views/CurrentNote.vue'),
