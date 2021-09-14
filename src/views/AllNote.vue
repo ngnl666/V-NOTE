@@ -31,7 +31,7 @@
                 </div>
                 <p class="text-md text-gray-400 align-middle cursor-pointer dark:text-white" @click="timeSort()">
                     照時間順序<span class="ml-2"
-                        ><i class="fas fa-arrow-up" :class="{ 'rotate-180': isRotate }"></i
+                        ><i class="fas fa-arrow-up duration-200" :class="{ 'rotate-180': isRotate }"></i
                     ></span>
                 </p>
             </div>
@@ -59,13 +59,13 @@ export default {
     },
     setup() {
         const store = inject('store');
-        const { state, SortMyNotes, setKeyword, setLoading } = store;
+        const { state, sortMyNotes, setKeyword, setLoading } = store;
 
         const isRotate = ref(true);
 
         const timeSort = () => {
             isRotate.value = !isRotate.value;
-            SortMyNotes(isRotate.value);
+            sortMyNotes(isRotate.value);
         };
 
         const currKeyword = computed({
@@ -82,23 +82,16 @@ export default {
         setLoading();
 
         onMounted(() => {
-            SortMyNotes(isRotate.value);
+            sortMyNotes(isRotate.value);
         });
 
         return {
             ...toRefs(state),
-            isRotate,
-            currKeyword,
             clearInput,
+            currKeyword,
+            isRotate,
             timeSort,
         };
     },
 };
 </script>
-
-<style lang="scss" scoped>
-.rotate-180 {
-    transform: rotate(180deg);
-    transition: all 0.25s;
-}
-</style>

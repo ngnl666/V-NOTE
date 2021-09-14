@@ -19,8 +19,12 @@
         >
             <p class="font-extralight" @click.self="goToNote(note.id)">標題: {{ note.title }}</p>
             <span>
-                <i class="far fa-star" @click="addStar(note.id, true)" v-if="!note.stared"></i>
-                <i class="fas fa-star" @click="addStar(note.id, false)" v-else></i>
+                <i
+                    class="far fa-star duration-200 hover:scale-125"
+                    @click="addStar(note.id, true)"
+                    v-if="!note.stared"
+                ></i>
+                <i class="fas fa-star duration-200 hover:scale-125" @click="addStar(note.id, false)" v-else></i>
             </span>
         </div>
     </div>

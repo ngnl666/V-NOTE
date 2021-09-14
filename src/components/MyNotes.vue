@@ -1,8 +1,36 @@
 <template>
-    <div class="cursor-pointer p-4 hover:bg-gray-200 dark:hover:bg-transparent">
+    <div class="cursor-pointer p-4">
         <div class="flex justify-between px-6 mb-6">
             <h3 class="text-xl dark:text-white" v-html="highLight(myNote.title)"></h3>
-            <NoteTopBar :myNote="myNote" />
+            <NoteTopBar>
+                <template v-slot:edit>
+                    <span class="hover:text-gray-500 dark:hover:text-gray-400 dark:text-white">
+                        <i class="fas fa-edit"></i>
+                    </span>
+                </template>
+                <template v-slot:delete>
+                    <span
+                        class="hover:text-gray-500 dark:hover:text-gray-400 dark:text-white"
+                        @click="setShowModal(myNote, true)"
+                    >
+                        <i class="far fa-trash-alt"></i>
+                    </span>
+                </template>
+                <template v-slot:star>
+                    <span class="text-yellow-400">
+                        <i
+                            class="far fa-star duration-200 hover:scale-125"
+                            @click="addStar(myNote.id, true)"
+                            v-if="!myNote.stared"
+                        ></i>
+                        <i
+                            class="fas fa-star duration-200 hover:scale-125"
+                            @click="addStar(myNote.id, false)"
+                            v-else
+                        ></i>
+                    </span>
+                </template>
+            </NoteTopBar>
         </div>
         <router-link :to="`/current/view/${myNote.id}`">
             <div class="px-6 mb-8">
@@ -56,7 +84,7 @@ export default {
     },
     setup({ myNote }) {
         const store = inject('store');
-        const { state, addStar, deleteMyNote, getTime, setKeyword } = store;
+        const { state, addStar, setShowModal, getTime, setKeyword } = store;
 
         let tempContent = ref('');
 
@@ -71,6 +99,8 @@ export default {
             myNote,
             tempContent,
             getTime,
+            addStar,
+            setShowModal,
             highLight,
             searchTag,
         };

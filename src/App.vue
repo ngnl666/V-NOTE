@@ -5,7 +5,7 @@
             <label class="controlLabel after:content-[attr(data-content)]" data-content="☀️" for="darkmodeBtn"></label>
         </div>
         <router-link class="max-w-xl" to="/">
-            <!-- <img class="mx-auto pt-8 mb-8" src="./assets/images/logo.png" alt="V-NOTE" /> -->
+            <img class="mx-auto pt-8 mb-8" src="./assets/images/logo.png" alt="V-NOTE" />
             <h1 class="text-3xl text-center font-black text-green-500 my-8">V-NOTE</h1>
         </router-link>
         <NavBar />

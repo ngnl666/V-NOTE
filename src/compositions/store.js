@@ -7,6 +7,7 @@ const state = reactive({
     myNotes: JSON.parse(localStorage.getItem('stared')) || [],
     currNote: {},
     isSort: false,
+    showModal: false,
     keyword: '',
     nextPageId: '',
     hasNextPage: [true, true],
@@ -37,6 +38,19 @@ const state = reactive({
     ),
 });
 
+watch(
+    () => state.myNotes,
+    v => {
+        localStorage.setItem('stared', JSON.stringify(v));
+    },
+    { deep: true }
+);
+
+watch(
+    () => state.nextPageId,
+    v => fetchCurrNote(v)
+);
+
 // mutations
 const uploadNote = newNote => state.myNotes.push({ ...newNote, id: uuidv4(), date: new Date() });
 
@@ -46,7 +60,7 @@ const addStar = (id, status) => {
         : (state.myNotes.find(item => item.id === id).stared = false);
 };
 
-const SortMyNotes = status => {
+const sortMyNotes = status => {
     if (status) {
         state.isSort = true;
         state.myNotes.sort((a, b) => Date.parse(b.date).valueOf() - Date.parse(a.date).valueOf());
@@ -56,15 +70,16 @@ const SortMyNotes = status => {
     }
 };
 
-const deleteMyNote = id =>
-    state.myNotes.splice(
-        state.myNotes.findIndex(item => item.id === id),
-        1
-    );
-
 const getTime = t => `${new Date(t).toISOString().split('T')[0]} ${new Date(t).toLocaleTimeString('zh-tw')}`;
 
 const setKeyword = word => (state.keyword = word);
+
+const setCurrNote = note => (state.currNote = note);
+
+const setShowModal = (myNote, status) => {
+    setCurrNote(myNote);
+    state.showModal = status;
+};
 
 const setDarkMode = status => {
     if (status) {
@@ -81,6 +96,15 @@ const setLoading = () => {
     // 改成 ajax
     state.loadingStatus.isLoading = true;
     setTimeout(() => (state.loadingStatus.isLoading = false), 1000);
+};
+
+const deleteMyNote = id => {
+    state.myNotes.splice(
+        state.myNotes.findIndex(item => item.id === id),
+        1
+    );
+    setLoading();
+    router.push({ name: 'all' });
 };
 
 const resetHasNextPage = () => {
@@ -115,37 +139,25 @@ const nextPage = status => {
 
 // actions
 const fetchCurrNote = id => {
-    state.currNote = state.myNotes.find(item => item.id === id);
+    setCurrNote(state.myNotes.find(item => item.id === id));
     if (!state.currNote) {
-        state.currNote = state.myNotes[0];
+        setCurrNote(state.myNotes[0]);
         router.push({ name: 'all' });
     }
 };
 
-watch(
-    () => state.myNotes,
-    v => {
-        localStorage.setItem('stared', JSON.stringify(v));
-    },
-    { deep: true }
-);
-
-watch(
-    () => state.nextPageId,
-    v => fetchCurrNote(v)
-);
-
 export default {
     state: readonly(state),
-    uploadNote,
-    deleteMyNote,
     addStar,
-    SortMyNotes,
-    getTime,
-    setKeyword,
-    setDarkMode,
-    setLoading,
-    resetHasNextPage,
+    deleteMyNote,
     fetchCurrNote,
+    getTime,
     nextPage,
+    resetHasNextPage,
+    setDarkMode,
+    setKeyword,
+    setLoading,
+    setShowModal,
+    sortMyNotes,
+    uploadNote,
 };

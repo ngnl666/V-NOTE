@@ -1,37 +1,28 @@
 <template>
+    <Modal v-if="showModal" />
     <div class="space-x-4">
-        <span class="hover:text-gray-500 dark:hover:text-gray-400 dark:text-white">
-            <i class="fas fa-edit"></i>
-        </span>
-        <span class="hover:text-gray-500 dark:hover:text-gray-400 dark:text-white" @click="deleteMyNote(myNote.id)">
-            <i class="far fa-trash-alt"></i>
-        </span>
-        <span class="text-yellow-400">
-            <!-- 不會動態更換 -->
-            <i class="far fa-star" @click="addStar(myNote.id, true)" v-if="!myNote.stared"></i>
-            <i class="fas fa-star" @click="addStar(myNote.id, false)" v-else></i>
-        </span>
+        <slot name="edit"></slot>
+        <slot name="delete"></slot>
+        <slot name="star"></slot>
     </div>
 </template>
 
 <script>
-import { inject } from 'vue';
+import { inject, toRefs } from 'vue';
+
+import Modal from '@/components/Modal.vue';
 
 export default {
     name: 'NoteTopBar',
-    props: {
-        myNote: {
-            type: Object,
-        },
+    components: {
+        Modal,
     },
-    setup({ myNote }) {
+    setup() {
         const store = inject('store');
-        const { addStar, deleteMyNote } = store;
+        const { state } = store;
 
         return {
-            myNote,
-            addStar,
-            deleteMyNote,
+            ...toRefs(state),
         };
     },
 };

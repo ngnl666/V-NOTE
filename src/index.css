@@ -27,4 +27,8 @@
   .nextPageBtn {
     @apply h-48 w-20 text-5xl text-gray-400/50 flex items-center duration-200 hover:text-gray-500/70 dark:hover:text-gray-200/70;
   }
+
+  .modalBtn {
+    @apply font-bold rounded py-1.5 px-3;
+  }
 }
