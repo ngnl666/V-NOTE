@@ -11,11 +11,12 @@
                         transition
                         duration-500
                         rounded
+                        animate-pulse
                         py-4
                         px-6
                         hover:bg-green-300 hover:border-green-500
                     "
-                    @click="isOpen = !isOpen"
+                    @click="setIsOpen(true)"
                 >
                     <i class="fas fa-plus"></i>
                 </button>
@@ -87,7 +88,7 @@
                             hover:bg-red-700 hover:text-white
                             dark:text-white
                         "
-                        @click="isOpen = !isOpen"
+                        @click="setIsOpen(false)"
                     >
                         取消
                     </button>
@@ -110,9 +111,8 @@ export default {
     name: 'Note',
     setup() {
         const store = inject('store');
-        const { state, uploadNote } = store;
+        const { state, uploadNote, setIsOpen } = store;
 
-        let isOpen = ref(false);
         let isNull = ref(false);
         let tag = ref('');
 
@@ -140,7 +140,8 @@ export default {
                 return;
             }
             uploadNote(note);
-            isNull.value = isOpen.value = false;
+            setIsOpen(false);
+            isNull.value = false;
             note.title = note.content = '';
             note.tags = [];
         };
@@ -180,8 +181,8 @@ export default {
             ...toRefs(state),
             tag,
             note,
-            isOpen,
             isNull,
+            setIsOpen,
             addTags,
             upload,
             generateNote,

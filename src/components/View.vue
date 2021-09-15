@@ -11,7 +11,13 @@
             </div>
             <NoteTopBar>
                 <template v-slot:edit>
-                    <span class="hover:text-gray-500 dark:hover:text-gray-400 dark:text-white">
+                    <span
+                        class="hover:text-gray-500 dark:hover:text-gray-400 dark:text-white"
+                        @click="
+                            setIsEdit(true);
+                            setIsOpen(true);
+                        "
+                    >
                         <i class="fas fa-edit"></i>
                     </span>
                 </template>
@@ -58,7 +64,7 @@ export default {
     },
     setup() {
         const store = inject('store');
-        const { state, fetchCurrNote, getTime, setShowModal, addStar } = store;
+        const { state, fetchCurrNote, getTime, setShowModal, setIsEdit, addStar } = store;
 
         const route = useRoute();
 
@@ -68,6 +74,7 @@ export default {
             ...toRefs(state),
             getTime,
             setShowModal,
+            setIsEdit,
             addStar,
         };
     },

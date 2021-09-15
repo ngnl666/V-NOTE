@@ -6,7 +6,9 @@ import router from '../router';
 const state = reactive({
     myNotes: JSON.parse(localStorage.getItem('stared')) || [],
     currNote: {},
+    isOpen: false,
     isSort: false,
+    isEdit: false,
     showModal: false,
     keyword: '',
     nextPageId: '',
@@ -75,6 +77,10 @@ const getTime = t => `${new Date(t).toISOString().split('T')[0]} ${new Date(t).t
 const setKeyword = word => (state.keyword = word);
 
 const setCurrNote = note => (state.currNote = note);
+
+const setIsOpen = status => (state.isOpen = status); // here
+
+const setIsEdit = status => (state.isEdit = status);
 
 const setShowModal = (myNote, status) => {
     setCurrNote(myNote);
@@ -155,6 +161,8 @@ export default {
     nextPage,
     resetHasNextPage,
     setDarkMode,
+    setIsEdit,
+    setIsOpen,
     setKeyword,
     setLoading,
     setShowModal,

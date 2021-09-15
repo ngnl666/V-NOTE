@@ -20,16 +20,16 @@
                         v-model="currKeyword"
                     />
                     <span
-                        class="text-xl absolute right-3 pt-1.5"
+                        class="text-xl cursor-pointer absolute right-3 pt-1.5"
                         :class="{
                             'text-gray-400': currKeyword,
                             'text-gray-300': !currKeyword,
                         }"
                         @click="clearInput()"
-                        ><i class="far fa-times-circle"></i
+                        ><i class="far fa-times-circle duration-150 hover:rotate-90"></i
                     ></span>
                 </div>
-                <p class="text-md text-gray-400 align-middle cursor-pointer dark:text-white" @click="timeSort()">
+                <p class="text-md text-gray-400 cursor-pointer pt-2 dark:text-white" @click="timeSort()">
                     照時間順序<span class="ml-2"
                         ><i class="fas fa-arrow-up duration-200" :class="{ 'rotate-180': isRotate }"></i
                     ></span>
@@ -87,10 +87,10 @@ export default {
 
         return {
             ...toRefs(state),
+            timeSort,
             clearInput,
             currKeyword,
             isRotate,
-            timeSort,
         };
     },
 };
