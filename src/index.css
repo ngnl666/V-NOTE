@@ -31,4 +31,8 @@
   .modalBtn {
     @apply font-bold rounded py-1.5 px-3;
   }
+
+  .noteTopBarIcon {
+    @apply hover:text-gray-500 dark:hover:text-gray-400 dark:text-white;
+  }
 }

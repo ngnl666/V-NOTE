@@ -29,6 +29,7 @@
                         ><i class="far fa-times-circle duration-150 hover:rotate-90"></i
                     ></span>
                 </div>
+                <span><i class="fas fa-star"></i></span>
                 <p class="text-md text-gray-400 cursor-pointer pt-2 dark:text-white" @click="timeSort()">
                     照時間順序<span class="ml-2"
                         ><i class="fas fa-arrow-up duration-200" :class="{ 'rotate-180': isRotate }"></i
