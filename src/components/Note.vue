@@ -126,13 +126,16 @@ export default {
       content: state.currNote.content || '',
       tags: state.currNote.tags || [],
       stared: state.currNote.stared || false,
+      id: state.currNote.id || '',
+      date: state.currNote.date || null,
     });
+    if (state.currNote.tags) note.tags = [...state.currNote.tags];
 
     const addTags = () => {
       if (tag.value && note.tags.length < 5) {
         note.tags.push(tag.value);
-        tag.value = '';
       }
+      tag.value = '';
     };
 
     const upload = note => {
@@ -144,13 +147,12 @@ export default {
         });
         return;
       }
-      //   mode === 'upload' ? uploadNote(note) : editNote(note);
-      uploadNote(note);
+
+      state.isEdit ? editNote(note) : uploadNote(note);
       setIsOpen(false);
       setIsEdit(false);
       isNull.value = false;
       note.title = note.content = '';
-      note.tags = [];
     };
 
     onUnmounted(() => {
@@ -162,9 +164,9 @@ export default {
       tag,
       note,
       isNull,
+      addTags,
       setIsOpen,
       setIsEdit,
-      addTags,
       upload,
     };
   },

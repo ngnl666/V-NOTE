@@ -33,14 +33,14 @@ const state = reactive({
 
   filteredNote: computed(() =>
     state.myNotes.filter(item => {
-      if (state.keyword.includes('#')) {
+      if (state.keyword.includes('#') && item.tags)
         return item.tags.includes(state.keyword.slice(1));
-      } else {
-        return (
-          item.title.includes(state.keyword) ||
-          item.content.includes(state.keyword)
-        );
-      }
+      if (state.keyword === '★') return item.stared;
+
+      return (
+        item.title.includes(state.keyword) ||
+        item.content.includes(state.keyword)
+      );
     })
   ),
 });
@@ -59,10 +59,19 @@ watch(
 );
 
 // mutations
-const uploadNote = newNote =>
-  state.myNotes.push({ ...newNote, id: uuidv4(), date: new Date() });
+const uploadNote = newNote => {
+  state.myNotes.push({
+    ...newNote,
+    id: uuidv4(),
+    date: new Date(),
+  });
+};
 
-const editNote = newNote => console.log(newNote);
+const editNote = newNote => {
+  const id = state.myNotes.findIndex(item => item.id === newNote.id);
+  state.myNotes.splice(id, 1, { ...newNote });
+  setLoading();
+};
 
 const addStar = (id, status) => {
   status
@@ -90,7 +99,6 @@ const getTime = t =>
   )}`;
 
 const setKeyword = word => (state.keyword = word);
-
 const setCurrNote = note => (state.currNote = note);
 
 const setIsOpen = status => (state.isOpen = status); // here
@@ -166,7 +174,6 @@ const nextPage = status => {
 const fetchCurrNote = id => {
   setCurrNote(state.myNotes.find(item => item.id === id));
   if (!state.currNote) setCurrNote(state.myNotes[0]);
-  // if (state.currNote && id !== state.currNote.id)
   router.push({ params: { id: id } });
 };
 

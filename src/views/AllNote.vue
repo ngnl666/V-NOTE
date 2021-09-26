@@ -1,49 +1,68 @@
 <template>
-    <div class="max-w-4xl mx-auto">
-        <loading
-            v-model:active="loadingStatus.isLoading"
-            :can-cancel="true"
-            :is-full-page="loadingStatus.fullPage"
-            :blur="loadingStatus.blur"
-            :loader="loadingStatus.loader"
-            :color="loadingStatus.color"
-        />
+  <div class="max-w-4xl mx-auto">
+    <loading
+      v-model:active="loadingStatus.isLoading"
+      :can-cancel="true"
+      :is-full-page="loadingStatus.fullPage"
+      :blur="loadingStatus.blur"
+      :loader="loadingStatus.loader"
+      :color="loadingStatus.color"
+    />
 
-        <div class="border border-gray-300 rounded-3xl p-8">
-            <div class="flex justify-between mb-8">
-                <h2 class="text-2xl text-gray-400 dark:text-white">文章列表</h2>
-                <div class="relative">
-                    <input
-                        type="text"
-                        class="text-gray-400 text-center placeholder-gray-300 input-focus rounded-3xl px-16 py-2"
-                        placeholder="請輸入關鍵字"
-                        v-model="currKeyword"
-                    />
-                    <span
-                        class="text-xl cursor-pointer absolute right-3 pt-1.5"
-                        :class="{
-                            'text-gray-400': currKeyword,
-                            'text-gray-300': !currKeyword,
-                        }"
-                        @click="clearInput()"
-                        ><i class="far fa-times-circle duration-150 hover:rotate-90"></i
-                    ></span>
-                </div>
-                <span><i class="fas fa-star"></i></span>
-                <p class="text-md text-gray-400 cursor-pointer pt-2 dark:text-white" @click="timeSort()">
-                    照時間順序<span class="ml-2"
-                        ><i class="fas fa-arrow-up duration-200" :class="{ 'rotate-180': isRotate }"></i
-                    ></span>
-                </p>
-            </div>
-            <hr />
-            <MyNotes v-for="item in filteredNote" :key="item.id" :myNote="item" />
-            <div class="text-center" v-if="!myNotes.length">
-                <p class="reminder">目前還沒有發表任何文章喔!</p>
-                <router-link class="homeBtn" to="/">回首頁</router-link>
-            </div>
+    <div class="border border-gray-300 rounded-3xl p-8">
+      <div class="flex justify-between mb-8">
+        <h2 class="text-2xl text-gray-400 dark:text-white">文章列表</h2>
+        <div class="flex">
+          <div class="relative">
+            <input
+              type="text"
+              class="
+                text-gray-400 text-center
+                placeholder-gray-300
+                input-focus
+                rounded-3xl
+                px-16
+                py-2
+              "
+              placeholder="請輸入關鍵字"
+              v-model="currKeyword"
+            />
+            <span
+              class="text-xl cursor-pointer absolute right-3 pt-1.5"
+              :class="{
+                'text-gray-400': currKeyword,
+                'text-gray-300': !currKeyword,
+              }"
+              @click="clearInput()"
+              ><i class="far fa-times-circle duration-150 hover:rotate-90"></i
+            ></span>
+          </div>
+          <span
+            class="text-yellow-400 ml-6 pt-1.5 active:scale-125"
+            @click="setKeyword('★')"
+            ><i class="fas fa-star"></i
+          ></span>
         </div>
+        <p
+          class="text-md text-gray-400 cursor-pointer pt-2 dark:text-white"
+          @click="timeSort()"
+        >
+          照時間順序<span class="ml-2"
+            ><i
+              class="fas fa-arrow-up duration-200"
+              :class="{ 'rotate-180': isRotate }"
+            ></i
+          ></span>
+        </p>
+      </div>
+      <hr />
+      <MyNotes v-for="item in filteredNote" :key="item.id" :myNote="item" />
+      <div class="text-center" v-if="!myNotes.length">
+        <p class="reminder">目前還沒有發表任何文章喔!</p>
+        <router-link class="homeBtn" to="/">回首頁</router-link>
+      </div>
     </div>
+  </div>
 </template>
 <script>
 import { computed, inject, ref, onMounted, toRefs } from 'vue';
@@ -53,46 +72,47 @@ import 'vue-loading-overlay/dist/vue-loading.css';
 import MyNotes from '@/components/MyNotes.vue';
 
 export default {
-    name: 'AllNote',
-    components: {
-        Loading,
-        MyNotes,
-    },
-    setup() {
-        const store = inject('store');
-        const { state, sortMyNotes, setKeyword, setLoading } = store;
+  name: 'AllNote',
+  components: {
+    Loading,
+    MyNotes,
+  },
+  setup() {
+    const store = inject('store');
+    const { state, sortMyNotes, setKeyword, setLoading } = store;
 
-        const isRotate = ref(true);
+    const isRotate = ref(true);
 
-        const timeSort = () => {
-            isRotate.value = !isRotate.value;
-            sortMyNotes(isRotate.value);
-        };
+    const timeSort = () => {
+      isRotate.value = !isRotate.value;
+      sortMyNotes(isRotate.value);
+    };
 
-        const currKeyword = computed({
-            get() {
-                return state.keyword;
-            },
-            set(value) {
-                return setKeyword(value);
-            },
-        });
+    const currKeyword = computed({
+      get() {
+        return state.keyword;
+      },
+      set(value) {
+        return setKeyword(value);
+      },
+    });
 
-        const clearInput = () => setKeyword('');
+    const clearInput = () => setKeyword('');
 
-        setLoading();
+    setLoading();
 
-        onMounted(() => {
-            sortMyNotes(isRotate.value);
-        });
+    onMounted(() => {
+      sortMyNotes(isRotate.value);
+    });
 
-        return {
-            ...toRefs(state),
-            timeSort,
-            clearInput,
-            currKeyword,
-            isRotate,
-        };
-    },
+    return {
+      ...toRefs(state),
+      timeSort,
+      clearInput,
+      setKeyword,
+      currKeyword,
+      isRotate,
+    };
+  },
 };
 </script>
