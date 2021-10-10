@@ -1,14 +1,14 @@
 <template>
-  <div class="cursor-pointer p-4">
+  <div class="p-4">
     <div v-if="!loadNote">
       <div class="flex justify-between px-6 mb-6">
         <h3
-          class="text-xl dark:text-white"
+          class="text-gray-900 text-2xl font-medium dark:text-white"
           v-html="highLight(myNote.title)"
         ></h3>
         <NoteTopBar>
           <template v-slot:edit>
-            <span class="noteTopBarIcon mr-1">
+            <span class="noteTopBarIcon mr-1" @click="openShareBox">
               <i class="fas fa-share-alt"></i>
             </span>
           </template>
@@ -33,12 +33,27 @@
           </template>
         </NoteTopBar>
       </div>
-      <router-link :to="`/current/view/${myNote.id}`">
+      <router-link :to="`/current/view/${myNote.id}`" class="cursor-pointer">
         <div class="px-6 mb-8">
           <section
             class="break-words text-gray-500 dark:text-gray-400"
             v-html="highLight(tempContent)"
           ></section>
+          <span class="text-indigo-500 inline-flex items-center mt-4"
+            >閱讀更多
+            <svg
+              class="w-4 h-4 ml-2"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+              fill="none"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M5 12h14"></path>
+              <path d="M12 5l7 7-7 7"></path>
+            </svg>
+          </span>
         </div>
         <div class="flex justify-between my-4">
           <ul class="flex">
@@ -114,9 +129,13 @@ export default {
 
     const searchTag = tag => setKeyword(`#${tag}`);
 
+    const openShareBox = () => {
+      console.log('dd');
+    };
+
     setTimeout(() => (loadNote.value = false), 1000);
 
-    tempContent.value = `${myNote.content.substring(0, 200)}．．．閱讀更多`;
+    tempContent.value = `${myNote.content.substring(0, 200)}．．．`;
 
     return {
       myNote,
@@ -127,6 +146,7 @@ export default {
       setShowModal,
       highLight,
       searchTag,
+      openShareBox,
     };
   },
 };

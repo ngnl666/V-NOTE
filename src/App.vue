@@ -1,17 +1,54 @@
 <template>
   <div id="app">
-    <div class="absolute top-10 left-8">
-      <input
-        class="controlBtn"
-        id="darkmodeBtn"
-        type="checkbox"
-        v-model="darkmode"
-      />
-      <label
-        class="controlLabel after:content-[attr(data-content)]"
-        data-content="☀️"
-        for="darkmodeBtn"
-      ></label>
+    <div class="flex justify-between pt-8 px-8">
+      <div>
+        <input
+          class="controlBtn"
+          id="darkmodeBtn"
+          type="checkbox"
+          v-model="darkmode"
+        />
+        <label
+          class="controlLabel after:content-[attr(data-content)]"
+          data-content="☀️"
+          for="darkmodeBtn"
+        ></label>
+      </div>
+      <div class="relative z-50">
+        <button
+          class="border-2 rounded-2xl cursor-pointer px-4 py-2 dark:text-white"
+          @click="showDropdown"
+        >
+          歡迎回來 Arron
+        </button>
+        <div
+          class="
+            w-48
+            bg-white
+            rounded-md
+            border-2 border-gray-100
+            shadow-xl
+            absolute
+            right-1
+            mt-4
+            py-2
+            animate__animated animate__fadeIn
+            dark:bg-gray-700
+          "
+          v-if="dropdown"
+        >
+          <router-link class="dropDownItem" :to="{ name: 'all' }"
+            ><i class="fas fa-book-open mr-2"></i>我的文章</router-link
+          >
+          <hr />
+          <router-link class="dropDownItem" to="/signin"
+            ><i class="fas fa-sign-in-alt mr-2"></i>登入</router-link
+          >
+          <router-link class="dropDownItem" to="/signout"
+            ><i class="fas fa-sign-out-alt mr-2"></i>登出</router-link
+          >
+        </div>
+      </div>
     </div>
     <router-link class="max-w-xl" to="/">
       <img
@@ -43,6 +80,9 @@ export default {
     const { setDarkMode } = store;
 
     let darkmode = ref(JSON.parse(localStorage.getItem('darkmode')));
+    let dropdown = ref(false);
+
+    const showDropdown = () => (dropdown.value = !dropdown.value);
 
     watch(
       () => darkmode.value,
@@ -59,6 +99,8 @@ export default {
 
     return {
       darkmode,
+      showDropdown,
+      dropdown,
     };
   },
 };

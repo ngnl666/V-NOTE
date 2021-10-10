@@ -9,9 +9,9 @@
   }
 
   textarea {
-    @apply w-10/12 h-35 border border-gray-300 rounded-2xl resize-none pt-3.5 pl-3.5 input-focus;
+    @apply w-full h-35 border border-gray-300 rounded-2xl resize-none pt-3.5 pl-3.5 input-focus;
   }
-  
+
   .input-focus {
     @apply focus:border-2 focus:border-green-400 focus:outline-none;
   }
@@ -34,5 +34,13 @@
 
   .noteTopBarIcon {
     @apply hover:text-gray-500 dark:hover:text-gray-400 dark:text-white;
+  }
+
+  .noteUtility {
+    @apply text-gray-400 hover:text-gray-300;
+  }
+
+  .dropDownItem {
+    @apply text-gray-500 text-sm capitalize block px-4 py-2 hover:bg-blue-500 hover:text-white dark:text-white;
   }
 }

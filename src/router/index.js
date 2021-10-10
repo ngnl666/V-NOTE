@@ -12,6 +12,16 @@ const routes = [
     component: () => import('@/views/AllNote.vue'),
   },
   {
+    path: '/save',
+    name: 'save',
+    component: () => import('@/views/Save.vue'),
+  },
+  {
+    path: '/explore',
+    name: 'explore',
+    component: () => import('@/views/Explore.vue'),
+  },
+  {
     path: '/current',
     name: 'current',
     component: () => import('@/views/CurrentNote.vue'),

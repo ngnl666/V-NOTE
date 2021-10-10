@@ -4,6 +4,8 @@ import router from './router';
 import store from '@/compositions/store';
 import './index.css';
 
+import 'sweetalert2/dist/sweetalert2.min.css';
+
 const { state, setIsEdit, setIsOpen } = store;
 
 router.beforeEach((to, from) => {

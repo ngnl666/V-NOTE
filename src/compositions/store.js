@@ -99,6 +99,7 @@ const getTime = t =>
   )}`;
 
 const setKeyword = word => (state.keyword = word);
+
 const setCurrNote = note => (state.currNote = note);
 
 const setIsOpen = status => (state.isOpen = status); // here

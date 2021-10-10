@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col fixed top-0 right-0 pt-16 pr-16">
+  <div class="flex flex-col fixed top-0 right-0 pt-24 pr-16">
     <LatestNotes v-for="item in getLatestNote" :key="item.id" :note="item" />
   </div>
   <CreateNote>

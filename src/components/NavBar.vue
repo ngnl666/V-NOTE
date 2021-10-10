@@ -2,9 +2,9 @@
   <div class="mx-auto my-8">
     <ul class="space-x-4 flex justify-center text-gray-400 dark:text-white">
       <li><router-link :to="{ name: 'Home' }">首頁</router-link></li>
-      <li><router-link :to="{ name: 'all' }">所有文章</router-link></li>
-      <li><router-link to="/todo">待辦事項</router-link></li>
-      <li><router-link to="/new">新功能</router-link></li>
+      <li><router-link :to="{ name: 'all' }">我的文章</router-link></li>
+      <li><router-link :to="{ name: 'save' }">已收藏</router-link></li>
+      <li><router-link :to="{ name: 'explore' }">探索</router-link></li>
     </ul>
   </div>
 </template>
