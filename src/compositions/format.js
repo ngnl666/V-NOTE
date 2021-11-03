@@ -1,3 +1,5 @@
+const nonHighLightList = ['*(', ')*', '_(', ')_', '"(', '")'];
+
 const selectedArea = (content, start, end) => {
   const selectWord = content.slice(start, end).split('\n')[0];
   return [start, start + selectWord.length - 1];
@@ -30,10 +32,12 @@ const markup = content => {
     .replaceAll('_(', '<span class="underline">')
     .replaceAll(')_', '</span>')
     .replaceAll('"(', '<div class="bg-gray-300/30 rounded-md px-4 py-2">')
-    .replaceAll(')"', '</div>');
+    .replaceAll(')"', '</div>')
+    .replaceAll('\n', '<br/>');
 };
 
 export default {
+  nonHighLightList,
   selectedArea,
   formatWord,
   markup,

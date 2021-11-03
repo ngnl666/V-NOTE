@@ -1,5 +1,5 @@
 <template>
-  <div class="note border border-gray-300 rounded-3xl p-8">
+  <div class="note border border-gray-300 rounded-3xl p-6 mb-6 md:p-8">
     <div class="mb-8">
       <div class="flex justify-between mb-6">
         <div>
@@ -11,16 +11,19 @@
           <input
             type="text"
             id="note__title--input"
+            class="mt-2 inline-block"
             maxlength="15"
             autocomplete="off"
             v-model.trim="note.title"
           />
-          <span class="text-red-400 ml-4" :class="{ hidden: !isNull }"
+          <span
+            class="text-red-400 block mt-4 md:ml-4"
+            :class="{ hidden: !isNull }"
             >*此欄位不能為空</span
           >
         </div>
         <div
-          class="text-3xl text-red-400 cursor-pointer animate-pulse pr-6"
+          class="text-3xl text-red-400 cursor-pointer animate-pulse md:pr-6"
           @click="openInfoBox"
         >
           <i class="fas fa-info-circle hover:scale-110 duration-150"></i>
@@ -28,7 +31,14 @@
       </div>
       <div class="mb-4">
         <label
-          class="text-gray-400 align-middle mr-4 dark:text-white"
+          class="
+            text-gray-400
+            align-middle
+            block
+            mr-4
+            md:inline-block
+            dark:text-white
+          "
           for="note__tags--input"
           >Tags:</label
         >
@@ -36,17 +46,21 @@
           <input
             type="text"
             id="note__tags--input"
+            class="mt-2"
             maxlength="10"
             autocomplete="off"
             v-model.trim="tag"
             @keyup.enter="addTags()"
           />
           <span
-            class="text-2xl text-green-400 absolute right-3 pt-1"
+            class="text-2xl text-green-400 absolute right-3 pt-1 mt-2"
             @click="addTags()"
             ><i class="fas fa-arrow-alt-circle-right"></i
           ></span>
-          <div class="text-red-400 ml-4" v-if="note.tags.length === 5">
+          <div
+            class="text-red-400 block mt-4 md:ml-4"
+            v-if="note.tags.length === 5"
+          >
             *最多同時擁有 5 個 tag
           </div>
         </span>
@@ -61,6 +75,8 @@
             px-2
             py-0.5
             mr-4
+            mb-4
+            md:mb-0
             dark:bg-gray-400
           "
           v-for="(tag, index) in note.tags"
@@ -70,11 +86,13 @@
         </li>
       </ul>
     </div>
-    <div class="mb-8 w-10/12">
-      <div class="mb-4 flex justify-between">
+    <div class="mb-8 md:w-10/12">
+      <div class="mb-4 flex justify-between items-start">
         <label class="text-gray-400 dark:text-white"
           >內文:
-          <span class="text-red-400 ml-4" :class="{ hidden: !isNull }"
+          <span
+            class="text-red-400 block mt-4 md:ml-4"
+            :class="{ hidden: !isNull }"
             >*此欄位不能為空</span
           >
         </label>

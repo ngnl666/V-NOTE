@@ -1,5 +1,5 @@
 <template>
-  <div class="w-56 p-4 animate__animated animate__backInDown">
+  <div class="w-48 p-4 animate__animated animate__backInDown xl:w-56">
     <div
       class="
         bg-gradient-to-br
@@ -17,17 +17,20 @@
       :class="{ fade: isFade }"
       @click.self="goToNote(note.id)"
     >
-      <p class="font-extralight" @click.self="goToNote(note.id)">
+      <p
+        class="text-md font-extralight lg:text-lg"
+        @click.self="goToNote(note.id)"
+      >
         標題: {{ note.title }}
       </p>
       <span>
         <i
-          class="far fa-star duration-200 hover:scale-125"
+          class="far fa-star iconHover"
           @click="addStar(note.id, true)"
           v-if="!note.stared"
         ></i>
         <i
-          class="fas fa-star duration-200 hover:scale-125"
+          class="fas fa-star iconHover"
           @click="addStar(note.id, false)"
           v-else
         ></i>

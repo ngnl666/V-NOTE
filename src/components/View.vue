@@ -1,5 +1,5 @@
 <template>
-  <div class="px-4">
+  <div class="p-4">
     <div class="flex justify-between mb-8">
       <div>
         <h3 class="text-3xl dark:text-white">

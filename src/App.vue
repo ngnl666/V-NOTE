@@ -50,18 +50,49 @@
         </div>
       </div>
     </div>
+    <img
+      class="logoImg mx-auto h-44 pt-8 mb-8 md:h-auto"
+      src="./assets/images/logo.png"
+      alt="V-NOTE"
+    />
     <router-link class="max-w-xl" to="/">
-      <img
-        class="logoImg mx-auto pt-8 mb-8"
-        src="./assets/images/logo.png"
-        alt="V-NOTE"
-      />
       <h1 class="text-3xl text-center font-black text-green-500 my-8">
         V-NOTE
       </h1>
     </router-link>
     <NavBar />
     <router-view></router-view>
+    <div
+      class="
+        goTop
+        w-10
+        h-10
+        bg-gray-100
+        rounded-full
+        cursor-pointer
+        fixed
+        bottom-3
+        right-5
+        transition
+        duration-500
+        md:w-14 md:h-14
+      "
+      :class="{ 'bg-gray-300': !onTop }"
+      @click="goTop"
+    >
+      <i
+        class="
+          fas
+          fa-rocket
+          text-xl
+          relative
+          top-2/4
+          left-2/4
+          -translate-x-2/4 -translate-y-2/4
+          md:text-3xl
+        "
+      ></i>
+    </div>
   </div>
 </template>
 
@@ -81,8 +112,15 @@ export default {
 
     let darkmode = ref(JSON.parse(localStorage.getItem('darkmode')));
     let dropdown = ref(false);
+    let onTop = ref(false);
 
     const showDropdown = () => (dropdown.value = !dropdown.value);
+
+    const goTop = () => window.scrollTo(0, 'smooth');
+
+    window.addEventListener('scroll', () =>
+      window.pageYOffset ? (onTop.value = false) : (onTop.value = true)
+    );
 
     watch(
       () => darkmode.value,
@@ -99,8 +137,10 @@ export default {
 
     return {
       darkmode,
+      onTop,
       showDropdown,
       dropdown,
+      goTop,
     };
   },
 };
@@ -119,14 +159,14 @@ export default {
   }
 
   + .controlLabel {
-    @apply w-20 h-9 block outline-none bg-white text-center rounded-3xl p-0.5 
+    @apply w-20 h-9 text-lg block outline-none bg-white text-center rounded-3xl p-0.5
             relative cursor-pointer select-none shadow-xl;
     transition: all 0.4s ease;
     border: 1px solid #e8eae9;
 
     &:before,
     &:after {
-      @apply block relative w-3/6 h-full;
+      @apply block relative w-3/6 h-full pr-1;
     }
 
     &:before {

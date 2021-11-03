@@ -1,5 +1,5 @@
 <template>
-  <div class="mx-auto flex justify-center">
+  <div class="mx-auto flex justify-center mb-8">
     <button
       class="
         bg-green-400
@@ -18,7 +18,7 @@
     >
       <i class="fas fa-plus"></i>
     </button>
-    <button @click="generateNote">generate</button>
+    <!-- <button @click="generateNote">generate</button> -->
   </div>
 </template>
 <script>
@@ -50,7 +50,7 @@ export default {
               reactive({
                 title: `TEST${i + 1}`,
                 content:
-                  '#(Lorem ipsum dolor sit)#, "(amet consectetur adipisicing elit.)" Doloribus vero _(voluptatem harum)_, quos dignissimos consequatur fugit nesciunt aperiam perferendis rerum provident perspiciatis illo temporibus tenetur atque ex *(voluptatibus rem saepe qui iure. Unde reprehenderit impedit omnis? Totam dolores, accusantium blanditiis, repellat pariatur maxime perferendis necessitatibus impedit ipsa soluta "(_(corporis)_)" quia.)*',
+                  '*(Lorem ipsum dolor sit)*, "(amet consectetur adipisicing elit.)" Doloribus vero _(voluptatem harum)_, quos dignissimos consequatur fugit nesciunt aperiam perferendis rerum provident perspiciatis illo temporibus tenetur atque ex *(voluptatibus rem saepe qui iure. Unde reprehenderit impedit omnis? Totam dolores, accusantium blanditiis, repellat pariatur maxime perferendis necessitatibus impedit ipsa soluta "(_(corporis)_)" quia.)*',
                 tags: ['111', '222', '333'],
                 stared: false,
                 date: new Date(),

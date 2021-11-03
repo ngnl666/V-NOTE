@@ -3,13 +3,17 @@
 @tailwind utilities;
 @tailwind variants;
 
+html {
+  scroll-behavior: smooth;
+}
+
 @layer components {
   input {
     @apply w-72 h-10 border border-gray-300 rounded-2xl pl-3.5 input-focus;
   }
 
   textarea {
-    @apply w-full h-35 border border-gray-300 rounded-2xl resize-none pt-3.5 pl-3.5 input-focus;
+    @apply w-full h-96 border border-gray-300 rounded-2xl resize-none p-3.5 input-focus md:h-35;
   }
 
   .input-focus {
@@ -20,12 +24,20 @@
     @apply text-xl text-gray-400 underline hover:text-green-400 dark:hover:text-green-400 dark:text-white;
   }
 
+  .iconHover {
+    @apply duration-200 hover:scale-125;
+  }
+
   .reminder {
     @apply text-3xl font-bold py-8 dark:text-white;
   }
 
   .nextPageBtn {
-    @apply h-48 w-20 text-5xl text-gray-400/50 flex items-center duration-200 hover:text-gray-500/70 dark:hover:text-gray-200/70;
+    @apply h-48 w-20 text-5xl text-gray-400/50 flex items-center duration-200 hidden md:block hover:text-gray-500/70  dark:hover:text-gray-200/70;
+  }
+
+  .phone-nextPageBtn {
+    @apply text-lg text-gray-400/50 duration-200 hover:text-gray-500/70  dark:hover:text-gray-200/70;
   }
 
   .modalBtn {
@@ -42,5 +54,17 @@
 
   .dropDownItem {
     @apply text-gray-500 text-sm capitalize block px-4 py-2 hover:bg-blue-500 hover:text-white dark:text-white;
+  }
+
+  .exploreAttribute {
+    @apply text-gray-400 text-base border-r-2 border-gray-200 leading-none inline-flex items-center pr-3 py-1 ml-auto mr-3 lg:ml-auto;
+  }
+
+  .pageTitle {
+    @apply text-2xl text-gray-400 mb-6 text-center dark:text-white md:text-left md:mb-0;
+  }
+
+  .scenery {
+    @apply w-52 h-36 border-4 border-gray-200 shadow-lg rounded-lg hover:border-blue-300;
   }
 }

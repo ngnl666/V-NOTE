@@ -1,5 +1,5 @@
 <template>
-  <div class="max-w-4xl mx-auto">
+  <div class="max-w-4xl mx-auto px-2 md:px-4">
     <transition name="fade" mode="out-in">
       <slot name="btn" v-if="!isOpen"></slot>
       <slot name="note" v-else></slot>
@@ -23,7 +23,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 // animation
 .fade-enter-active,
 .fade-leave-active {

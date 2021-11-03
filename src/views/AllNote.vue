@@ -1,5 +1,5 @@
 <template>
-  <div class="max-w-4xl mx-auto">
+  <div class="max-w-4xl mx-auto px-2 md:px-6">
     <loading
       v-model:active="loadingStatus.isLoading"
       :can-cancel="true"
@@ -10,10 +10,10 @@
     />
 
     <div class="border border-gray-300 rounded-3xl p-8">
-      <div class="flex justify-between mb-8">
-        <h2 class="text-2xl text-gray-400 dark:text-white">文章列表</h2>
-        <div class="flex">
-          <div class="relative">
+      <div class="mb-4 justify-between md:flex md:mb-8">
+        <h2 class="pageTitle">文章列表</h2>
+        <div class="flex justify-center">
+          <div class="relative mb-4 md:mb-0">
             <input
               type="text"
               class="
@@ -38,13 +38,20 @@
             ></span>
           </div>
           <span
-            class="text-yellow-400 ml-6 pt-1.5 active:scale-125"
+            class="text-yellow-400 ml-6 pt-1.5 md:text-xl active:scale-125"
             @click="setKeyword('★')"
             ><i class="fas fa-star"></i
           ></span>
         </div>
         <p
-          class="text-md text-gray-400 cursor-pointer pt-2 dark:text-white"
+          class="
+            text-md text-gray-400
+            cursor-pointer
+            pt-2
+            text-right
+            md:text-lg md:text-center
+            dark:text-white
+          "
           @click="timeSort()"
         >
           照時間順序<span class="ml-2"
@@ -93,7 +100,7 @@ export default {
         return state.keyword;
       },
       set(value) {
-        return setKeyword(value);
+        return setKeyword(value.replace(/[^\w\s]/gi, ''));
       },
     });
 

@@ -1,6 +1,15 @@
 <template>
   <div class="mx-auto my-8">
-    <ul class="space-x-4 flex justify-center text-gray-400 dark:text-white">
+    <ul
+      class="
+        text-md text-gray-400
+        flex
+        justify-center
+        space-x-4
+        md:text-lg
+        dark:text-white
+      "
+    >
       <li><router-link :to="{ name: 'Home' }">首頁</router-link></li>
       <li><router-link :to="{ name: 'all' }">我的文章</router-link></li>
       <li><router-link :to="{ name: 'save' }">已收藏</router-link></li>

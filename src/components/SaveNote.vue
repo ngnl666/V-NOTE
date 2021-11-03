@@ -5,6 +5,9 @@
         >Arron Su</span
       >
       <span class="text-gray-500 text-sm mt-1">2021-10-12</span>
+      <span class="text-lg mt-1"
+        ><i class="fas fa-bookmark iconHover"></i
+      ></span>
       <ul class="flex mt-6">
         <li
           class="
@@ -35,18 +38,7 @@
       </p>
       <span class="text-indigo-500 inline-flex items-center mt-4"
         >閱讀更多
-        <svg
-          class="w-4 h-4 ml-2"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          stroke-width="2"
-          fill="none"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <path d="M5 12h14"></path>
-          <path d="M12 5l7 7-7 7"></path>
-        </svg>
+        <i class="fas fa-arrow-right ml-2"></i>
       </span>
     </div>
   </div>

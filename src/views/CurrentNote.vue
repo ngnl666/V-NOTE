@@ -1,6 +1,15 @@
 <template>
   <div
-    class="max-w-5xl mx-auto flex justify-center space-x-12 items-center"
+    class="
+      max-w-5xl
+      mx-auto
+      justify-center
+      space-x-12
+      items-center
+      px-2
+      mb-8
+      md:flex
+    "
     v-if="!isEdit"
   >
     <loading
@@ -21,13 +30,44 @@
     >
       <i class="fas fa-chevron-left"></i>
     </div>
-    <div class="w-[820px] overflow-hidden">
+    <!-- phone page btn -->
+    <div class="flex justify-around !ml-0 md:hidden">
       <div
-        class="w-full border border-gray-300 rounded-3xl p-8"
-        :class="{ fadeToggle: displaying }"
+        class="phone-nextPageBtn"
+        :class="{ invisible: !hasNextPage[0] }"
+        @click="
+          nextPage(-1);
+          triggerAnimation();
+        "
       >
-        <router-view> </router-view>
+        上一篇
+        <i class="fas fa-chevron-left"></i>
       </div>
+      <div
+        class="phone-nextPageBtn"
+        :class="{ invisible: !hasNextPage[1] }"
+        @click="
+          nextPage(1);
+          triggerAnimation();
+        "
+      >
+        <i class="fas fa-chevron-right"></i>
+        下一篇
+      </div>
+    </div>
+    <!-- phone page btn -->
+    <div
+      class="
+        max-w-[820px]
+        border border-gray-300
+        rounded-3xl
+        p-3
+        !ml-0
+        md:p-8 md:!ml-8
+      "
+      :class="{ fadeToggle: displaying }"
+    >
+      <router-view> </router-view>
     </div>
     <div
       class="nextPageBtn"
