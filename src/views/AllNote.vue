@@ -86,7 +86,7 @@ export default {
   },
   setup() {
     const store = inject('store');
-    const { state, sortMyNotes, setKeyword, setLoading } = store;
+    const { state, getAllNote, sortMyNotes, setKeyword, setLoading } = store;
 
     const isRotate = ref(true);
 
@@ -110,6 +110,7 @@ export default {
 
     onMounted(() => {
       sortMyNotes(isRotate.value);
+      getAllNote();
     });
 
     return {

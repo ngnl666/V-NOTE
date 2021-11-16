@@ -106,10 +106,41 @@
           <span class="noteUtility" @click="markup('quote')"
             ><i class="fas fa-quote-right"></i
           ></span>
-          <span class="noteUtility"><i class="fas fa-images"></i></span>
+          <span class="noteUtility">
+            <label for="image"><i class="fas fa-images"></i></label
+            ><input
+              type="file"
+              class="hidden"
+              name="image"
+              id="image"
+              accept=".png,.jpg,.jpeg"
+              ref="file"
+              @change="uploadFile()"
+          /></span>
         </div>
       </div>
       <textarea v-model.trim="note.content"></textarea>
+      <div class="flex justify-center mt-8 flex-wrap">
+        <div class="m-4 relative" v-for="item in currImage" :key="item._id">
+          <i
+            class="
+              fas
+              fa-times-circle
+              text-xl
+              absolute
+              -top-4
+              -left-2
+              iconHover
+            "
+            @click="removeImg(item)"
+          ></i>
+          <img
+            class="w-52 h-32 rounded-md shadow-2xl"
+            :src="item.url"
+            alt="my-image"
+          />
+        </div>
+      </div>
     </div>
     <div class="flex justify-end">
       <button
@@ -159,13 +190,23 @@ export default {
   name: 'Note',
   setup() {
     const store = inject('store');
-    const { state, uploadNote, setIsOpen, setIsEdit, editNote } = store;
+    const {
+      state,
+      editNote,
+      removeImg,
+      setIsEdit,
+      setIsOpen,
+      uploadNote,
+      uploadImg,
+    } = store;
     const { selectedArea, formatWord } = format;
 
+    const file = ref(null);
     let isNull = ref(false);
     let tag = ref('');
 
     const note = reactive({
+      author: 'Arron001',
       title: state.currNote.title || '',
       content: state.currNote.content || '',
       tags: state.currNote.tags || [],
@@ -230,25 +271,33 @@ export default {
       }
     };
 
+    const uploadFile = async () => {
+      await uploadImg(file.value.files[0]);
+    };
+
     onMounted(() => {
       openInfoBox();
     });
 
     onUnmounted(() => {
       setIsEdit(false);
+      state.currImage.forEach(item => removeImg(item));
     });
 
     return {
       ...toRefs(state),
-      tag,
-      note,
+      addTags,
+      file,
       isNull,
+      tag,
+      markup,
+      note,
+      openInfoBox,
+      removeImg,
       setIsOpen,
       setIsEdit,
-      addTags,
       upload,
-      markup,
-      openInfoBox,
+      uploadFile,
     };
   },
 };

@@ -1,11 +1,17 @@
 import { reactive, computed, watch, readonly } from 'vue';
-import { v4 as uuidv4 } from 'uuid';
 import router from '../router';
+import { _postNote, _getAllNote } from '@/compositions/api';
+import {
+  uploadImgToStorage,
+  getUrlfromStorage,
+  deleteImgFromStorage,
+} from '@/compositions/firebase';
 
 // state
 const state = reactive({
   myNotes: JSON.parse(localStorage.getItem('stared')) || [],
   currNote: {},
+  currImage: [],
   isOpen: false,
   isSort: false,
   isEdit: false,
@@ -45,13 +51,13 @@ const state = reactive({
   ),
 });
 
-watch(
-  () => state.myNotes,
-  v => {
-    localStorage.setItem('stared', JSON.stringify(v));
-  },
-  { deep: true }
-);
+// watch(
+//   () => state.myNotes,
+//   v => {
+//     localStorage.setItem('stared', JSON.stringify(v));
+//   },
+//   { deep: true }
+// );
 
 watch(
   () => state.nextPageId,
@@ -59,14 +65,6 @@ watch(
 );
 
 // mutations
-const uploadNote = newNote => {
-  state.myNotes.push({
-    ...newNote,
-    id: uuidv4(),
-    date: new Date(),
-  });
-};
-
 const editNote = newNote => {
   const id = state.myNotes.findIndex(item => item.id === newNote.id);
   state.myNotes.splice(id, 1, { ...newNote });
@@ -178,12 +176,43 @@ const fetchCurrNote = id => {
   router.push({ params: { id: id } });
 };
 
+const uploadNote = async newNote => {
+  const res = await _postNote({ ...newNote, image: state.currImage });
+  if (res) state.myNotes.push(res.data);
+  state.currImage = [];
+};
+
+const getAllNote = async () => {
+  const res = await _getAllNote();
+  if (res) return (state.myNotes = res.data);
+};
+
+const uploadImg = async file => {
+  const res = await uploadImgToStorage(
+    file,
+    `images/${new Date().toISOString()}_${file.name}`
+  );
+  const url = await getUrlfromStorage(res.metadata.fullPath);
+  state.currImage.push({ fileName: res.metadata.fullPath, url: url });
+};
+
+const removeImg = async data => {
+  await deleteImgFromStorage(data.fileName);
+
+  state.currImage.splice(
+    state.currImage.findIndex(item => item.fileName === data.fileName),
+    1
+  );
+};
+
 export default {
   state: readonly(state),
   addStar,
   deleteMyNote,
   fetchCurrNote,
   getTime,
+  getAllNote,
+  removeImg,
   nextPage,
   resetHasNextPage,
   setCurrNote,
@@ -195,5 +224,6 @@ export default {
   setShowModal,
   sortMyNotes,
   uploadNote,
+  uploadImg,
   editNote,
 };

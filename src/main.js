@@ -4,6 +4,8 @@ import router from './router';
 import store from '@/compositions/store';
 import './index.css';
 
+import axios from 'axios';
+import VueAxios from 'vue-axios';
 import 'sweetalert2/dist/sweetalert2.min.css';
 
 const { state, setIsEdit, setIsOpen } = store;
@@ -20,4 +22,4 @@ router.beforeEach((to, from) => {
   setIsOpen(false);
 });
 
-createApp(App).use(router).mount('#app');
+createApp(App).use(router).use(VueAxios, axios).mount('#app');
