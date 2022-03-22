@@ -31,14 +31,7 @@
       </div>
       <div class="mb-4">
         <label
-          class="
-            text-gray-400
-            align-middle
-            block
-            mr-4
-            md:inline-block
-            dark:text-white
-          "
+          class="text-gray-400 align-middle block mr-4 md:inline-block dark:text-white"
           for="note__tags--input"
           >Tags:</label
         >
@@ -68,17 +61,7 @@
 
       <ul class="flex flex-wrap">
         <li
-          class="
-            bg-gray-200
-            text-white
-            rounded-md
-            px-2
-            py-0.5
-            mr-4
-            mb-4
-            md:mb-0
-            dark:bg-gray-400
-          "
+          class="bg-gray-200 text-white rounded-md px-2 py-0.5 mr-4 mb-4 md:mb-0 dark:bg-gray-400"
           v-for="(tag, index) in note.tags"
           :key="index"
         >
@@ -123,15 +106,7 @@
       <div class="flex justify-center mt-8 flex-wrap">
         <div class="m-4 relative" v-for="item in currImage" :key="item._id">
           <i
-            class="
-              fas
-              fa-times-circle
-              text-xl
-              absolute
-              -top-4
-              -left-2
-              iconHover
-            "
+            class="fas fa-times-circle text-xl absolute -top-4 -left-2 iconHover"
             @click="removeImg(item)"
           ></i>
           <img
@@ -144,18 +119,7 @@
     </div>
     <div class="flex justify-end">
       <button
-        class="
-          bg-transparent
-          border border-red-700
-          text-red-700
-          font-bold
-          rounded
-          py-2
-          px-6
-          mr-4
-          hover:bg-red-700 hover:text-white
-          dark:text-white
-        "
+        class="bg-transparent border border-red-700 text-red-700 font-bold rounded py-2 px-6 mr-4 hover:bg-red-700 hover:text-white dark:text-white"
         @click="
           setIsOpen(false);
           setIsEdit(false);
@@ -164,15 +128,7 @@
         取消
       </button>
       <button
-        class="
-          bg-green-400
-          text-white
-          font-bold
-          rounded
-          py-2
-          px-6
-          hover:bg-green-500
-        "
+        class="bg-green-400 text-white font-bold rounded py-2 px-6 hover:bg-green-500"
         @click="upload(note)"
       >
         上傳
@@ -182,6 +138,7 @@
 </template>
 <script>
 import { reactive, ref, inject, toRefs, onMounted, onUnmounted } from 'vue';
+import { useRouter } from 'vue-router';
 import format from '../compositions/format.js';
 
 import Swal from 'sweetalert2';
@@ -190,29 +147,37 @@ export default {
   name: 'Note',
   setup() {
     const store = inject('store');
+    const router = useRouter();
+
     const {
       state,
       editNote,
       removeImg,
+      removeCurrImage,
+      setAlertMsg,
+      setCurrImage,
       setIsEdit,
       setIsOpen,
-      uploadNote,
       uploadImg,
+      uploadNote,
     } = store;
     const { selectedArea, formatWord } = format;
-
     const file = ref(null);
     let isNull = ref(false);
     let tag = ref('');
 
     const note = reactive({
-      author: 'Arron001',
+      _id: state.currNote._id || '',
+      uid: JSON.parse(localStorage.getItem('userInfo')).uid,
+      author: state.currNote.author || state.userInfo.displayName,
       title: state.currNote.title || '',
       content: state.currNote.content || '',
       tags: state.currNote.tags || [],
       stared: state.currNote.stared || false,
-      id: state.currNote.id || '',
-      date: state.currNote.date || null,
+      image: state.currNote.image || '',
+      shared: state.currNote.shared || false,
+      createdAt: state.currNote.createdAt || '',
+      updatedAt: state.currNote.updatedAt || '',
     });
     if (state.currNote.tags) note.tags = [...state.currNote.tags];
 
@@ -250,8 +215,12 @@ export default {
         });
         return;
       }
+      if (!state.userInfo.emailVerified) {
+        setAlertMsg('error', '信箱驗證完成才可發文！');
+        return;
+      }
 
-      state.isEdit ? editNote(note) : uploadNote(note);
+      state.isEdit ? editNote(note._id, note) : uploadNote(note);
       setIsOpen(false);
       setIsEdit(false);
       isNull.value = false;
@@ -273,15 +242,25 @@ export default {
 
     const uploadFile = async () => {
       await uploadImg(file.value.files[0]);
+      window.scrollTo(0, document.body.scrollHeight);
     };
 
     onMounted(() => {
+      if (!state.userInfo) {
+        setAlertMsg('error', '請先登入！');
+        router.push({ name: 'login' });
+        return;
+      }
+      if (!state.userInfo.emailVerified) {
+        setAlertMsg('error', '信箱驗證完成才可發文！');
+      }
       openInfoBox();
+      state.currNote.image ? setCurrImage(state.currNote.image) : false;
     });
 
     onUnmounted(() => {
       setIsEdit(false);
-      state.currImage.forEach(item => removeImg(item));
+      removeCurrImage();
     });
 
     return {
@@ -289,13 +268,13 @@ export default {
       addTags,
       file,
       isNull,
-      tag,
       markup,
       note,
       openInfoBox,
       removeImg,
-      setIsOpen,
       setIsEdit,
+      setIsOpen,
+      tag,
       upload,
       uploadFile,
     };

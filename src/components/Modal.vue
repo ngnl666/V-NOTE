@@ -5,19 +5,7 @@
       @click="setShowModal(currNote, false)"
     >
       <div
-        class="
-          flex
-          w-[350px]
-          bg-white
-          shadow-md
-          rounded-lg
-          overflow-hidden
-          z-50
-          absolute
-          top-1/3
-          left-1/2
-          -translate-x-2/4
-        "
+        class="flex w-[350px] bg-white shadow-md rounded-lg overflow-hidden z-50 absolute top-1/3 left-1/2 -translate-x-2/4"
       >
         <div class="w-2 bg-red-500"></div>
         <div class="relative pl-2.5 py-3">
@@ -25,13 +13,7 @@
             確定要刪除 <span class="text-red-500">{{ currNote.title }}</span>
           </p>
           <span
-            class="
-              text-lg text-gray-500
-              cursor-pointer
-              absolute
-              top-1.5
-              right-0
-            "
+            class="text-lg text-gray-500 cursor-pointer absolute top-1.5 right-0"
             @click="setShowModal(currNote, false)"
             ><i class="far fa-times-circle duration-150 hover:rotate-90"></i
           ></span>
@@ -46,7 +28,7 @@
               </button>
               <button
                 class="modalBtn bg-red-500 text-white hover:bg-red-400"
-                @click="deleteMyNote(currNote.id)"
+                @click="deleteOneNote(currNote)"
               >
                 刪除
               </button>
@@ -65,11 +47,11 @@ export default {
   name: 'Modal',
   setup() {
     const store = inject('store');
-    const { state, deleteMyNote, setShowModal } = store;
+    const { state, deleteOneNote, setShowModal } = store;
 
     return {
       ...toRefs(state),
-      deleteMyNote,
+      deleteOneNote,
       setShowModal,
     };
   },

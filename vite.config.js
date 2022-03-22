@@ -12,6 +12,8 @@ export default defineConfig({
   MESSAGING_SENDER_ID: process.env.VITE_MESSAGING_SENDER_ID,
   APP_ID: process.env.VITE_APP_ID,
   MEASUREMENT_ID: process.env.VITE_MEASUREMENT_ID,
+  DEMO_EMAIL: process.env.VITE_DEMO_EMAIL,
+  DEMO_PASSWORD: process.env.VITE_DEMO_PASSWORD,
   resolve: {
     alias: [
       {

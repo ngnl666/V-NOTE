@@ -27,19 +27,19 @@
             <span class="text-yellow-400 md:text-xl">
               <i
                 class="far fa-star iconHover"
-                @click="addStar(myNote.id, true)"
+                @click="addStar(myNote._id, true)"
                 v-if="!myNote.stared"
               ></i>
               <i
                 class="fas fa-star iconHover"
-                @click="addStar(myNote.id, false)"
+                @click="addStar(myNote._id, false)"
                 v-else
               ></i>
             </span>
           </template>
         </NoteTopBar>
       </div>
-      <router-link :to="`/current/view/${myNote.id}`" class="cursor-pointer">
+      <router-link :to="`/current/view/${myNote._id}`" class="cursor-pointer">
         <div class="px-2 mb-8 md:px-6">
           <section
             class="break-words text-gray-500 md:text-xl dark:text-gray-400"
@@ -53,27 +53,16 @@
         <div class="my-4 md:flex justify-between">
           <ul class="flex flex-wrap">
             <li
-              class="
-                bg-gray-200
-                text-white
-                rounded-md
-                px-2
-                py-0.5
-                mr-4
-                mb-4
-                hover:bg-black
-                md:mb-0 md:text-xl
-                dark:bg-gray-400 dark:hover:bg-black
-              "
-              v-for="tag in myNote.tags"
-              :key="tag.id"
+              class="bg-gray-200 text-white rounded-md px-2 py-0.5 mr-4 mb-4 hover:bg-black md:mb-0 md:text-xl dark:bg-gray-400 dark:hover:bg-black"
+              v-for="(tag, index) in myNote.tags"
+              :key="index"
               @click.prevent="searchTag(tag)"
             >
               # {{ tag }}
             </li>
           </ul>
           <div class="md:text-xl dark:text-white">
-            {{ getTime(myNote.date) }}
+            {{ getTime(myNote.createdAt) }}
           </div>
         </div>
         <hr />
@@ -95,13 +84,12 @@
 </template>
 
 <script>
-import { inject, ref } from 'vue';
+import { inject, ref, toRefs } from 'vue';
+import Swal from 'sweetalert2';
 
 import format from '../compositions/format.js';
-import NoteTopBar from '@/components/NoteTopBar.vue';
 import Modal from '@/components/Modal.vue';
-
-import Swal from 'sweetalert2';
+import NoteTopBar from '@/components/NoteTopBar.vue';
 
 export default {
   name: 'MyNotes',
@@ -111,36 +99,62 @@ export default {
     },
   },
   components: {
-    NoteTopBar,
     Modal,
+    NoteTopBar,
   },
-  setup({ myNote }) {
+  setup(props) {
     const store = inject('store');
-    const { state, addStar, setShowModal, getTime, setKeyword } = store;
+    const {
+      state,
+      addStar,
+      setShowModal,
+      setAlertMsg,
+      getTime,
+      setKeyword,
+      editNote,
+      publishNote,
+    } = store;
     const { markup } = format;
 
-    let tempContent = ref('');
     let loadNote = ref(true);
-
-    const swalStyle = Swal.mixin({
-      customClass: {
-        confirmButton:
-          'bg-gray-300 text-white rounded-xl px-4 py-3 hover:bg-gray-300/50',
-        htmlContainer: '!text-gray-400',
-        input: 'bg-gray-300',
-      },
-      buttonsStyling: false,
-    });
+    const myNote = toRefs(props).myNote;
+    const tempContent = ref(`${myNote.value.content.substring(0, 200)}．．．`);
 
     const inputOptions = new Promise(resolve => {
       setTimeout(() => {
         resolve({
-          '0jpg': "<img class='scenery' src='../src/assets/images/0.jpg'/>",
-          '1jpg': "<img class='scenery' src='../src/assets/images/1.jpg'/>",
-          '2jpg': "<img class='scenery' src='../src/assets/images/2.jpg'/>",
+          '0.jpg': "<img class='scenery' src='../src/assets/images/0.jpg'/>",
+          '1.jpg': "<img class='scenery' src='../src/assets/images/1.jpg'/>",
+          '2.jpg': "<img class='scenery' src='../src/assets/images/2.jpg'/>",
         });
       }, 1000);
     });
+
+    const openShareBox = async title => {
+      const { value: jpg } = await Swal.fire({
+        title: `確定發布 <span class="text-red-400">${title}</span> 至探索`,
+        html: `<p>平台上的所有人將會看到你發佈的文章，請先選擇背景圖</p>`,
+        width: '800px',
+        input: 'radio',
+        confirmButtonText: '發佈',
+        inputOptions: inputOptions,
+        inputValidator: value => {
+          if (!value) {
+            return '請選擇一張背景圖!';
+          }
+        },
+      });
+      if (myNote.value.shared) setAlertMsg('error', '你已經分享過此文章了！');
+      if (jpg && !myNote.value.shared) {
+        const data = { _id: myNote.value._id, scene: jpg, like: 0 };
+        const sharedNote = { ...myNote.value };
+
+        sharedNote.shared = true;
+        await editNote(sharedNote._id, sharedNote);
+        publishNote(data);
+        Swal.fire({ html: `<p>發布成功！</p>`, icon: 'success' });
+      }
+    };
 
     const highLight = val => {
       if (state.keyword) {
@@ -155,41 +169,19 @@ export default {
 
     const searchTag = tag => setKeyword(`#${tag}`);
 
-    const openShareBox = async title => {
-      const { value: color } = await Swal.fire({
-        title: `確定發布 <span class="text-red-400">${title}</span> 至探索`,
-        html: `<p>平台上的所有人將會看到你發佈的文章，請先選擇背景圖</p>`,
-        width: '800px',
-        input: 'radio',
-        confirmButtonText: '發佈',
-        inputOptions: inputOptions,
-        inputValidator: value => {
-          if (!value) {
-            return '請選擇一張背景圖!';
-          }
-        },
-      });
-      if (color) {
-        // 儲存 發佈的文章和背景
-        Swal.fire({ html: `<p>發布成功！</p>`, icon: 'success' });
-      }
-    };
-
     setTimeout(() => (loadNote.value = false), 1000);
 
-    tempContent.value = `${myNote.content.substring(0, 200)}．．．`;
-
     return {
-      myNote,
-      tempContent,
-      loadNote,
-      getTime,
       addStar,
+      getTime,
+      loadNote,
+      myNote,
       setShowModal,
+      tempContent,
       highLight,
-      searchTag,
-      openShareBox,
       markup,
+      openShareBox,
+      searchTag,
     };
   },
 };

@@ -1,0 +1,14 @@
+{
+  "folders": [
+	{
+		"path": "../nodejs_course"
+	},
+	{
+		"path": "."
+	},
+	{
+		"path": "../V-NOTE-Backend"
+	}
+],
+  "settings": {}
+}

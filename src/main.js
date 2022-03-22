@@ -8,10 +8,12 @@ import axios from 'axios';
 import VueAxios from 'vue-axios';
 import 'sweetalert2/dist/sweetalert2.min.css';
 
-const { state, setIsEdit, setIsOpen } = store;
+const { state, setIsEdit, setIsOpen, setUserInfo } = store;
 
-router.beforeEach((to, from) => {
-  if (state.isOpen) {
+router.beforeEach(async (to, from) => {
+  await setUserInfo();
+
+  if (state.isOpen && state.userInfo) {
     let abort = from.params.id
       ? confirm('文章尚未編輯完成，確定要離開嗎？')
       : confirm('文章尚未發布，確定要離開嗎？');

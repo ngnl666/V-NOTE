@@ -1,24 +1,42 @@
 import { reactive, computed, watch, readonly } from 'vue';
 import router from '../router';
-import { _postNote, _getAllNote } from '@/compositions/api';
+
 import {
   uploadImgToStorage,
   getUrlfromStorage,
   deleteImgFromStorage,
 } from '@/compositions/firebase';
+import { signIn } from '@/compositions/auth';
+
+import {
+  _deleteOneNote,
+  _editNote,
+  _getAllNote,
+  _getOneNote,
+  _getOnePublishNote,
+  _getPaginate,
+  _likedNote,
+  _postNote,
+  _publishNote,
+  _removePublish,
+} from '@/compositions/api';
 
 // state
 const state = reactive({
-  myNotes: JSON.parse(localStorage.getItem('stared')) || [],
+  userInfo: {},
+  myNotes: [],
+  shareNotes: [],
+  selectedTags: [],
+  likedNoteList: JSON.parse(localStorage.getItem('likedNotes')) || [],
+  alertMsg: { type: '', msg: '', exist: false },
   currNote: {},
   currImage: [],
+  mode: '',
   isOpen: false,
   isSort: false,
   isEdit: false,
-  showModal: false,
   keyword: '',
-  nextPageId: '',
-  hasNextPage: [true, true],
+  showModal: false,
   loadingStatus: {
     isLoading: false,
     fullPage: true,
@@ -32,9 +50,10 @@ const state = reactive({
     return state.myNotes
       .slice()
       .sort(
-        (a, b) => Date.parse(b.date).valueOf() - Date.parse(a.date).valueOf()
+        (a, b) =>
+          Date.parse(b.createdAt).valueOf() - Date.parse(a.createdAt).valueOf()
       )
-      .slice(0, 7);
+      .slice(0, 5);
   }),
 
   filteredNote: computed(() =>
@@ -49,60 +68,92 @@ const state = reactive({
       );
     })
   ),
+
+  filteredSharedNote: computed(() => {
+    return state.shareNotes.filter(item => {
+      const res = item.Notes[0].tags.filter(
+        tag => state.selectedTags.indexOf(tag) !== -1
+      );
+      if (!state.selectedTags.length) return true;
+      return res.length ? true : false;
+    });
+  }),
 });
 
-// watch(
-//   () => state.myNotes,
-//   v => {
-//     localStorage.setItem('stared', JSON.stringify(v));
-//   },
-//   { deep: true }
-// );
+watch(
+  () => state.myNotes,
+  v => {
+    localStorage.setItem('stared', JSON.stringify(v));
+  },
+  { deep: true }
+);
 
 watch(
-  () => state.nextPageId,
-  v => fetchCurrNote(v)
+  () => state.likedNoteList,
+  v => {
+    localStorage.setItem('likedNotes', JSON.stringify(state.likedNoteList));
+  },
+  { deep: true }
 );
 
 // mutations
-const editNote = newNote => {
-  const id = state.myNotes.findIndex(item => item.id === newNote.id);
-  state.myNotes.splice(id, 1, { ...newNote });
-  setLoading();
-};
+const setKeyword = word => (state.keyword = word);
 
-const addStar = (id, status) => {
-  status
-    ? (state.myNotes.find(item => item.id === id).stared = true)
-    : (state.myNotes.find(item => item.id === id).stared = false);
-};
+const setIsOpen = status => (state.isOpen = status);
 
-const sortMyNotes = status => {
+const setIsEdit = status => (state.isEdit = status);
+
+const setSelectedTags = tags => (state.selectedTags = tags);
+
+const setCurrNote = note => (state.currNote = note);
+
+const setCurrImage = img => (state.currImage = img);
+
+const removeShareNotes = () => (state.shareNotes = []);
+
+const setLikedNoteList = (id, status) => {
   if (status) {
-    state.isSort = true;
-    state.myNotes.sort(
-      (a, b) => Date.parse(b.date).valueOf() - Date.parse(a.date).valueOf()
-    );
+    state.likedNoteList.push(id);
   } else {
-    state.isSort = false;
-    state.myNotes.sort(
-      (a, b) => Date.parse(a.date).valueOf() - Date.parse(b.date).valueOf()
+    state.likedNoteList.splice(
+      state.likedNoteList.findIndex(item => item === id),
+      1
     );
   }
+};
+
+const setIsLoading = () => {
+  state.loadingStatus.isLoading = true;
+  setTimeout(() => {
+    state.loadingStatus.isLoading = false;
+  }, 700);
+};
+
+const setAlertMsg = (type, msg) => {
+  state.alertMsg = { type, msg, exist: true };
+  setTimeout(() => (state.alertMsg.exist = false), 2000);
+};
+
+const setUserInfo = () => {
+  const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+  if (!userInfo?.uid) {
+    state.userInfo = '';
+    return;
+  }
+  state.userInfo = userInfo;
+};
+
+const removeCurrImage = () => (state.currImage = []);
+
+const addStar = (id, status) => {
+  state.myNotes.find(item => item._id === id).stared = status;
+  status ? setAlertMsg('success', '文章已加入收藏') : false;
 };
 
 const getTime = t =>
   `${new Date(t).toISOString().split('T')[0]} ${new Date(t).toLocaleTimeString(
     'zh-tw'
   )}`;
-
-const setKeyword = word => (state.keyword = word);
-
-const setCurrNote = note => (state.currNote = note);
-
-const setIsOpen = status => (state.isOpen = status); // here
-
-const setIsEdit = status => (state.isEdit = status);
 
 const setShowModal = (myNote, status) => {
   setCurrNote(myNote);
@@ -111,80 +162,167 @@ const setShowModal = (myNote, status) => {
 
 const setDarkMode = status => {
   if (status) {
+    state.mode = 'dark';
     document.documentElement.classList.add('dark');
     document.querySelector('.controlLabel').dataset.content = '🌙';
   } else {
+    state.mode = 'bright';
     document.documentElement.classList.remove('dark');
     document.querySelector('.controlLabel').dataset.content = '☀️';
   }
   localStorage.setItem('darkmode', JSON.stringify(status));
 };
 
-const setLoading = () => {
-  // 改成 ajax
-  state.loadingStatus.isLoading = true;
-  setTimeout(() => (state.loadingStatus.isLoading = false), 1000);
+const nextPage = (status, id) => {
+  const index = state.myNotes.findIndex(item => item._id === id);
+
+  if (index + status < 0) {
+    getOneNote(state.myNotes[state.myNotes.length - 1]._id);
+  } else if (index + status > state.myNotes.length - 1) {
+    getOneNote(state.myNotes[0]._id);
+  } else {
+    getOneNote(state.myNotes[index + status]._id);
+  }
 };
 
-const deleteMyNote = id => {
-  state.myNotes.splice(
-    state.myNotes.findIndex(item => item.id === id),
-    1
-  );
-  setLoading();
+const sortMyNotes = status => {
+  if (status) {
+    state.isSort = true;
+    state.myNotes.sort(
+      (a, b) =>
+        Date.parse(b.createdAt).valueOf() - Date.parse(a.createdAt).valueOf()
+    );
+  } else {
+    state.isSort = false;
+    state.myNotes.sort(
+      (a, b) =>
+        Date.parse(a.createdAt).valueOf() - Date.parse(b.createdAt).valueOf()
+    );
+  }
+};
+
+const loginWithDemoAccount = () => {
+  signIn(import.meta.env.VITE_DEMO_EMAIL, import.meta.env.VITE_DEMO_PASSWORD);
+  setAlertMsg('success', '登入成功！');
+  router.push({ name: 'Home' });
+};
+
+/* --------- actions --------- */
+const deleteOneNote = async currNote => {
+  const res = await _deleteOneNote(currNote._id);
+  removePublish(currNote._id);
+  if (!res) {
+    state.loadingStatus.isLoading = false;
+    setAlertMsg('error', '刪除文章失敗');
+    return;
+  }
+
+  setAlertMsg('success', '刪除文章成功');
+  currNote.image.forEach(item => removeImg(item));
+  getAllNote();
   router.push({ name: 'all' });
 };
 
-const resetHasNextPage = () => {
-  let id = state.myNotes.findIndex(item => item.id === state.currNote.id);
-  if (id === 0) {
-    state.hasNextPage[0] = false;
-  } else if (id === state.myNotes.length - 1) {
-    state.hasNextPage[1] = false;
-  } else {
-    state.hasNextPage = [true, true];
+const editNote = async (id, tempData) => {
+  state.loadingStatus.isLoading = true;
+  const res = await _editNote(id, tempData);
+  if (!res) {
+    state.loadingStatus.isLoading = false;
+    setAlertMsg('error', '編輯文章失敗');
+    return;
   }
+
+  state.loadingStatus.isLoading = false;
+  setAlertMsg('success', '編輯文章成功');
+  getOneNote(id);
 };
 
-const nextPage = status => {
-  for (let i = 0; i < state.myNotes.length; i++) {
-    if (state.myNotes[i].id === state.currNote.id) {
-      if (status === -1 && state.myNotes[i - 1]?.id) {
-        state.hasNextPage[1] = true;
-        i === 1
-          ? (state.hasNextPage[0] = false)
-          : (state.hasNextPage[0] = true);
-        state.nextPageId = state.myNotes[i - 1].id;
-        return;
-      }
-      if (status === 1 && state.myNotes[i + 1]?.id) {
-        state.hasNextPage[0] = true;
-        i === state.myNotes.length - 2
-          ? (state.hasNextPage[1] = false)
-          : (state.hasNextPage[1] = true);
-        state.nextPageId = state.myNotes[i + 1].id;
-        return;
-      }
-    }
+const getAllNote = async () => {
+  state.loadingStatus.isLoading = true;
+  const res = await _getAllNote(state.userInfo.uid);
+  const staredNotes = JSON.parse(localStorage.getItem('stared')) || [];
+  if (!res) {
+    state.loadingStatus.isLoading = false;
+    setAlertMsg('error', '取得文章列表失敗');
+    return;
   }
+
+  state.myNotes = res.data;
+  staredNotes.forEach(item => {
+    state.myNotes.forEach((note, i) => {
+      if (note._id === item._id) {
+        item.stared
+          ? (state.myNotes[i].stared = true)
+          : (state.myNotes[i].stared = false);
+      }
+    });
+  });
+  state.loadingStatus.isLoading = false;
 };
 
-// actions
-const fetchCurrNote = id => {
-  setCurrNote(state.myNotes.find(item => item.id === id));
-  if (!state.currNote) setCurrNote(state.myNotes[0]);
+const getOneNote = async id => {
+  const res = await _getOneNote(id);
+  if (!res) {
+    state.loadingStatus.isLoading = false;
+    setAlertMsg('error', '取得文章失敗');
+    return;
+  }
+
+  setCurrNote(res.data);
   router.push({ params: { id: id } });
+};
+
+const getPaginate = async page => {
+  state.loadingStatus.isLoading = true;
+  const res = await _getPaginate(page);
+  if (!res.data) {
+    setAlertMsg('error', '取得文章列表失敗');
+    state.loadingStatus.isLoading = false;
+    return;
+  }
+  state.loadingStatus.isLoading = false;
+  state.shareNotes = [...state.shareNotes, ...res.data];
+};
+
+const likedNote = async (id, status) => {
+  const note = await _getOnePublishNote(id);
+  note.data.like += status;
+
+  const res = await _likedNote(note.data._id, { data: note.data });
+  if (!res) {
+    setAlertMsg('error', '點擊愛心失敗！');
+    return;
+  }
+
+  state.shareNotes.find(item => item._id === res.data._id).like = res.data.like;
+};
+
+const publishNote = async data => {
+  state.loadingStatus.isLoading = true;
+  const res = await _publishNote(data);
+  if (!res) {
+    setAlertMsg('error', '分享文章失敗！');
+    state.loadingStatus.isLoading = false;
+    return;
+  }
+
+  getAllNote();
+  state.loadingStatus.isLoading = false;
+};
+
+const removePublish = async id => {
+  await _removePublish(id);
 };
 
 const uploadNote = async newNote => {
   const res = await _postNote({ ...newNote, image: state.currImage });
-  if (res) state.myNotes.push(res.data);
-  state.currImage = [];
-};
+  if (!res) {
+    setAlertMsg('error', '上傳文章失敗');
+    return;
+  }
 
-const getAllNote = async () => {
-  const res = await _getAllNote();
-  if (res) return (state.myNotes = res.data);
+  removeCurrImage();
+  getAllNote();
 };
 
 const uploadImg = async file => {
@@ -193,6 +331,7 @@ const uploadImg = async file => {
     `images/${new Date().toISOString()}_${file.name}`
   );
   const url = await getUrlfromStorage(res.metadata.fullPath);
+
   state.currImage.push({ fileName: res.metadata.fullPath, url: url });
 };
 
@@ -208,22 +347,33 @@ const removeImg = async data => {
 export default {
   state: readonly(state),
   addStar,
-  deleteMyNote,
-  fetchCurrNote,
+  deleteOneNote,
+  editNote,
   getTime,
   getAllNote,
-  removeImg,
+  getOneNote,
+  getPaginate,
+  likedNote,
+  loginWithDemoAccount,
   nextPage,
-  resetHasNextPage,
+  publishNote,
+  removeImg,
+  removeCurrImage,
+  removePublish,
+  removeShareNotes,
+  setAlertMsg,
+  setCurrImage,
   setCurrNote,
   setDarkMode,
   setIsEdit,
+  setIsLoading,
   setIsOpen,
+  setLikedNoteList,
   setKeyword,
-  setLoading,
   setShowModal,
+  setSelectedTags,
   sortMyNotes,
+  setUserInfo,
   uploadNote,
   uploadImg,
-  editNote,
 };

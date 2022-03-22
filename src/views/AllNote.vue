@@ -16,14 +16,7 @@
           <div class="relative mb-4 md:mb-0">
             <input
               type="text"
-              class="
-                text-gray-400 text-center
-                placeholder-gray-300
-                input-focus
-                rounded-3xl
-                px-16
-                py-2
-              "
+              class="text-gray-400 text-center placeholder-gray-300 input-focus rounded-3xl px-16 py-2"
               placeholder="請輸入關鍵字"
               v-model="currKeyword"
             />
@@ -44,14 +37,7 @@
           ></span>
         </div>
         <p
-          class="
-            text-md text-gray-400
-            cursor-pointer
-            pt-2
-            text-right
-            md:text-lg md:text-center
-            dark:text-white
-          "
+          class="text-md text-gray-400 cursor-pointer pt-2 text-right md:text-lg md:text-center dark:text-white"
           @click="timeSort()"
         >
           照時間順序<span class="ml-2"
@@ -63,7 +49,7 @@
         </p>
       </div>
       <hr />
-      <MyNotes v-for="item in filteredNote" :key="item.id" :myNote="item" />
+      <MyNotes v-for="item in filteredNote" :key="item._id" :myNote="item" />
       <div class="text-center" v-if="!myNotes.length">
         <p class="reminder">目前還沒有發表任何文章喔!</p>
         <router-link class="homeBtn" to="/">回首頁</router-link>
@@ -86,14 +72,9 @@ export default {
   },
   setup() {
     const store = inject('store');
-    const { state, getAllNote, sortMyNotes, setKeyword, setLoading } = store;
+    const { state, getAllNote, setKeyword, sortMyNotes } = store;
 
     const isRotate = ref(true);
-
-    const timeSort = () => {
-      isRotate.value = !isRotate.value;
-      sortMyNotes(isRotate.value);
-    };
 
     const currKeyword = computed({
       get() {
@@ -106,20 +87,22 @@ export default {
 
     const clearInput = () => setKeyword('');
 
-    setLoading();
-
-    onMounted(() => {
+    const timeSort = () => {
+      isRotate.value = !isRotate.value;
       sortMyNotes(isRotate.value);
-      getAllNote();
+    };
+
+    onMounted(async () => {
+      await getAllNote();
     });
 
     return {
       ...toRefs(state),
-      timeSort,
       clearInput,
-      setKeyword,
       currKeyword,
       isRotate,
+      setKeyword,
+      timeSort,
     };
   },
 };

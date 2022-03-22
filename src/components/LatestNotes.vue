@@ -1,37 +1,25 @@
 <template>
   <div class="w-48 p-4 animate__animated animate__backInDown xl:w-56">
     <div
-      class="
-        bg-gradient-to-br
-        from-green-400
-        to-green-200
-        text-white
-        flex
-        justify-between
-        rounded-xl
-        shadow-xl
-        cursor-pointer
-        p-4
-        hover:scale-125 hover:duration-300 hover:my-4
-      "
+      class="bg-gradient-to-br from-green-400 to-green-200 text-white flex justify-between rounded-xl shadow-xl cursor-pointer p-4 hover:scale-125 hover:duration-300 hover:my-4"
       :class="{ fade: isFade }"
-      @click.self="goToNote(note.id)"
+      @click.self="goToNote(note._id)"
     >
       <p
         class="text-md font-extralight lg:text-lg"
-        @click.self="goToNote(note.id)"
+        @click.self="goToNote(note._id)"
       >
         標題: {{ note.title }}
       </p>
       <span>
         <i
           class="far fa-star iconHover"
-          @click="addStar(note.id, true)"
+          @click="addStar(note._id, true)"
           v-if="!note.stared"
         ></i>
         <i
           class="fas fa-star iconHover"
-          @click="addStar(note.id, false)"
+          @click="addStar(note._id, false)"
           v-else
         ></i>
       </span>
@@ -52,11 +40,10 @@ export default {
     },
   },
   setup({ note }) {
-    // destructor props
     const store = inject('store');
+    const router = useRouter();
     const { state, addStar } = store;
 
-    const router = useRouter();
     const isFade = ref(false);
 
     const goToNote = id => {
@@ -68,10 +55,10 @@ export default {
     };
 
     return {
-      ...toRefs(state),
-      isFade,
       addStar,
       note,
+      isFade,
+      ...toRefs(state),
       goToNote,
     };
   },

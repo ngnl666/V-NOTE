@@ -9,6 +9,7 @@
     <router-link class="homeBtn" to="/">返回首頁</router-link>
   </div>
 </template>
+
 <script>
 export default {};
 </script>

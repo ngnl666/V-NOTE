@@ -1,20 +1,20 @@
 import { initializeApp } from 'firebase/app';
 import {
+  deleteObject,
+  getDownloadURL,
   getStorage,
   ref,
   uploadBytes,
-  deleteObject,
-  getDownloadURL,
 } from 'firebase/storage';
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_API_KEY,
+  appId: import.meta.env.VITE_APP_ID,
   authDomain: import.meta.env.VITE_AUTH_DOMAIN,
+  measurementId: import.meta.env.VITE_MEASUREMENT_ID,
+  messagingSenderId: import.meta.env.VITE_MESSAGING_SENDER_ID,
   projectId: import.meta.env.VITE_PROJECT_ID,
   storageBucket: import.meta.env.VITE_STORAGE_BUCKET,
-  messagingSenderId: import.meta.env.VITE_MESSAGING_SENDER_ID,
-  appId: import.meta.env.VITE_APP_ID,
-  measurementId: import.meta.env.VITE_MEASUREMENT_ID,
 };
 
 const metadata = {

@@ -1,15 +1,15 @@
 <template>
-  <div class="p-4">
+  <div class="p-4" v-if="currNote.title">
     <div class="flex justify-between mb-8">
       <div>
         <h3 class="text-3xl dark:text-white">
           {{ currNote.title }}
         </h3>
         <p class="text-gray-400 font-extralight mt-4">
-          {{ getTime(currNote.date) }}
+          建立於 {{ getTime(currNote.createdAt) }}
         </p>
       </div>
-      <NoteTopBar>
+      <NoteTopBar v-if="isShowNextPage">
         <template v-slot:edit>
           <span
             class="noteTopBarIcon"
@@ -26,26 +26,23 @@
             <i class="far fa-trash-alt"></i>
           </span>
         </template>
-        <template v-slot:star>
-          <span class="text-yellow-400">
-            <i
-              class="far fa-star duration-200 hover:scale-125"
-              @click="addStar(currNote.id, true)"
-              v-if="!currNote.stared"
-            ></i>
-            <i
-              class="fas fa-star duration-200 hover:scale-125"
-              @click="addStar(currNote.id, false)"
-              v-else
-            ></i>
-          </span>
-        </template>
       </NoteTopBar>
+      <div v-else>
+        <p class="rounded-md p-0.5 dark:bg-gray-100">
+          <span class="author text-sm font-bold md:text-xl">Written by</span>
+          <span class="">- {{ currNote.author }}</span>
+        </p>
+      </div>
     </div>
     <div
       class="font-light tracking-wide leading-8 dark:text-white"
       v-html="markup(currNote.content)"
     ></div>
+    <div v-for="img in currNote.image">
+      <div class="my-4">
+        <img class="rounded-xl shadow-xl" :src="img.url" alt="這是一張圖片" />
+      </div>
+    </div>
   </div>
 </template>
 
@@ -62,20 +59,23 @@ export default {
     NoteTopBar,
   },
   setup() {
-    const route = useRoute();
     const store = inject('store');
+    const route = useRoute();
     const {
       state,
-      fetchCurrNote,
-      getTime,
-      setShowModal,
-      setIsEdit,
       addStar,
+      getTime,
+      getOneNote,
+      setIsEdit,
       setIsOpen,
+      setShowModal,
     } = store;
     const { markup } = format;
 
-    fetchCurrNote(route.params.id);
+    let isShowNextPage =
+      localStorage.getItem('isShowNextPage') === 'false' ? false : true;
+
+    getOneNote(route.params.id);
 
     onUnmounted(() => {
       window.scrollTo({
@@ -85,14 +85,23 @@ export default {
     });
 
     return {
-      ...toRefs(state),
+      addStar,
       getTime,
-      setShowModal,
+      isShowNextPage,
       setIsEdit,
       setIsOpen,
-      addStar,
+      setShowModal,
+      ...toRefs(state),
       markup,
     };
   },
 };
 </script>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Satisfy&display=swap');
+
+.author {
+  font-family: 'Satisfy', cursive;
+}
+</style>

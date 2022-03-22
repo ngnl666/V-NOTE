@@ -38,7 +38,7 @@ const markup = content => {
 
 export default {
   nonHighLightList,
-  selectedArea,
   formatWord,
   markup,
+  selectedArea,
 };

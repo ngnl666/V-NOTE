@@ -1,15 +1,6 @@
 <template>
   <div
-    class="
-      max-w-5xl
-      mx-auto
-      justify-center
-      space-x-12
-      items-center
-      px-2
-      mb-8
-      md:flex
-    "
+    class="max-w-5xl mx-auto justify-center space-x-12 items-center px-2 mb-8 md:flex"
     v-if="!isEdit"
   >
     <loading
@@ -22,9 +13,9 @@
     />
     <div
       class="nextPageBtn"
-      :class="{ invisible: !hasNextPage[0] }"
+      v-if="isShowNextPage"
       @click="
-        nextPage(-1);
+        nextPage(-1, currNote._id);
         triggerAnimation();
       "
     >
@@ -34,9 +25,9 @@
     <div class="flex justify-around !ml-0 md:hidden">
       <div
         class="phone-nextPageBtn"
-        :class="{ invisible: !hasNextPage[0] }"
+        v-if="isShowNextPage"
         @click="
-          nextPage(-1);
+          nextPage(-1, currNote._id);
           triggerAnimation();
         "
       >
@@ -45,9 +36,9 @@
       </div>
       <div
         class="phone-nextPageBtn"
-        :class="{ invisible: !hasNextPage[1] }"
+        v-if="isShowNextPage"
         @click="
-          nextPage(1);
+          nextPage(1, currNote._id);
           triggerAnimation();
         "
       >
@@ -55,25 +46,18 @@
         下一篇
       </div>
     </div>
-    <!-- phone page btn -->
+    <!-- phone page btn end-->
     <div
-      class="
-        max-w-[820px]
-        border border-gray-300
-        rounded-3xl
-        p-3
-        !ml-0
-        md:p-8 md:!ml-8
-      "
+      class="max-w-[820px] border border-green-300 rounded-3xl p-3 !ml-0 md:p-8 md:!ml-8"
       :class="{ fadeToggle: displaying }"
     >
       <router-view> </router-view>
     </div>
     <div
       class="nextPageBtn"
-      :class="{ invisible: !hasNextPage[1] }"
+      v-if="isShowNextPage"
       @click="
-        nextPage(1);
+        nextPage(1, currNote._id);
         triggerAnimation();
       "
     >
@@ -88,7 +72,7 @@
 </template>
 
 <script>
-import { onMounted, inject, ref, toRefs, onUnmounted } from 'vue';
+import { inject, ref, toRefs, onUnmounted } from 'vue';
 import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/vue-loading.css';
 
@@ -98,33 +82,33 @@ import Note from '@/components/Note.vue';
 export default {
   name: 'CurrentNote',
   components: {
-    Loading,
     CreateNote,
+    Loading,
     Note,
   },
   setup() {
     const store = inject('store');
-    const { state, nextPage, resetHasNextPage, setCurrNote, setLoading } =
-      store;
+    const { state, getAllNote, nextPage, setCurrNote } = store;
 
     let displaying = ref(false);
+    let isShowNextPage =
+      localStorage.getItem('isShowNextPage') === 'false' ? false : true;
 
     const triggerAnimation = () => {
       displaying.value = true;
       setTimeout(() => (displaying.value = false), 500);
     };
 
-    setLoading();
-
-    onMounted(() => resetHasNextPage());
+    getAllNote();
 
     onUnmounted(() => setCurrNote(''));
 
     return {
-      ...toRefs(state),
-      triggerAnimation,
       displaying,
       nextPage,
+      isShowNextPage,
+      ...toRefs(state),
+      triggerAnimation,
     };
   },
 };

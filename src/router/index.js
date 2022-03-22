@@ -1,4 +1,5 @@
 import { createRouter, createWebHashHistory } from 'vue-router';
+import store from '@/compositions/store';
 
 const routes = [
   {
@@ -10,11 +11,23 @@ const routes = [
     path: '/all',
     name: 'all',
     component: () => import('@/views/AllNote.vue'),
+    beforeEnter: (to, from) => {
+      if (!store.state.userInfo) {
+        store.setAlertMsg('error', '請先登入後即可造訪！');
+        router.push({ name: 'login' });
+        return false;
+      }
+    },
   },
   {
-    path: '/save',
-    name: 'save',
-    component: () => import('@/views/Save.vue'),
+    path: '/login',
+    name: 'login',
+    component: () => import('@/views/Login.vue'),
+  },
+  {
+    path: '/register',
+    name: 'register',
+    component: () => import('@/views/Register.vue'),
   },
   {
     path: '/explore',
@@ -25,6 +38,14 @@ const routes = [
     path: '/current',
     name: 'current',
     component: () => import('@/views/CurrentNote.vue'),
+    beforeEnter: (to, from) => {
+      if (from.name === 'explore') {
+        localStorage.setItem('isShowNextPage', false);
+      }
+      if (from.name === 'all') {
+        localStorage.setItem('isShowNextPage', true);
+      }
+    },
     children: [
       {
         path: 'view/:id',
