@@ -48,7 +48,7 @@
     </div>
     <!-- phone page btn end-->
     <div
-      class="max-w-[820px] border border-green-300 rounded-3xl p-3 !ml-0 md:p-8 md:!ml-8"
+      class="card-container max-w-[820px] border shadow-2xl rounded-xl p-3 !ml-0 md:p-8 md:!ml-8"
       :class="{ fadeToggle: displaying }"
     >
       <router-view> </router-view>
@@ -132,5 +132,9 @@ export default {
 
 .fadeToggle {
   animation: fadeToggle 0.5s ease-out;
+}
+
+.card-container {
+  border-top: 2px solid rgb(100, 182, 135);
 }
 </style>
