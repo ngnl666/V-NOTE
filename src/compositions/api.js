@@ -1,8 +1,10 @@
 import axios from 'axios';
 
 const fetchData = axios.create({
-  baseURL: 'http://localhost:8080/api/',
-  headers: { 'Content-Type': 'application/json; charset=utf-8' },
+  baseURL: 'https://v-note-mongo.herokuapp.com/api/',
+  headers: {
+    'Content-Type': 'application/json; charset=utf-8',
+  },
 });
 
 // Note api

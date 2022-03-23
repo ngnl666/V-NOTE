@@ -4,14 +4,14 @@
 </template>
 
 <script>
-import { computed, inject, onMounted, toRefs } from 'vue';
+import { inject, onMounted, toRefs } from 'vue';
 import Chart from 'chart.js/auto';
 
 export default {
   name: 'ActiveChart',
   setup() {
     const store = inject('store');
-    const { state, getTime } = store;
+    const { state } = store;
 
     const get7Date = (m, d) => {
       const arr = [`${m}/${d}`];

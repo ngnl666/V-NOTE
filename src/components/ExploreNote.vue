@@ -74,15 +74,27 @@ export default {
   },
   setup({ note }) {
     const store = inject('store');
-    const { getTime, likedNote, setLikedNoteList } = store;
+    const { state, getTime, likedNote, setLikedNoteList, setAlertMsg } = store;
     const { markup } = format;
 
     const tempContent = ref(`${note.Notes[0].content.substring(0, 200)}．．．`);
-    const scene = '/src/assets/images/' + note.scene;
+    const scenes = {
+      '0.jpg':
+        'https://firebasestorage.googleapis.com/v0/b/v-note-86a34.appspot.com/o/scenes%2F0.jpg?alt=media&token=5656169a-a745-47c0-8646-a01acc7fa868',
+      '1.jpg':
+        'https://firebasestorage.googleapis.com/v0/b/v-note-86a34.appspot.com/o/scenes%2F1.jpg?alt=media&token=308023d2-0c14-4372-a44a-aec11975f616',
+      '2.jpg':
+        'https://firebasestorage.googleapis.com/v0/b/v-note-86a34.appspot.com/o/scenes%2F2.jpg?alt=media&token=540e741f-fac2-48af-ae06-3671b8be2565',
+    };
+    const scene = scenes[note.scene];
 
     let isLiked = ref(false);
 
     const sendLike = (id, status) => {
+      if (!state.userInfo) {
+        setAlertMsg('error', '請先登入才可使用此功能！');
+        return;
+      }
       isLiked.value = !isLiked.value;
 
       likedNote(id, status);

@@ -109,6 +109,8 @@ const setCurrNote = note => (state.currNote = note);
 
 const setCurrImage = img => (state.currImage = img);
 
+const removemyNotes = () => (state.myNotes = []);
+
 const removeShareNotes = () => (state.shareNotes = []);
 
 const setLikedNoteList = (id, status) => {
@@ -201,8 +203,11 @@ const sortMyNotes = status => {
   }
 };
 
-const loginWithDemoAccount = () => {
-  signIn(import.meta.env.VITE_DEMO_EMAIL, import.meta.env.VITE_DEMO_PASSWORD);
+const loginWithDemoAccount = async () => {
+  await signIn(
+    import.meta.env.VITE_DEMO_EMAIL,
+    import.meta.env.VITE_DEMO_PASSWORD
+  );
   setAlertMsg('success', '登入成功！');
   router.push({ name: 'Home' });
 };
@@ -360,6 +365,7 @@ export default {
   removeImg,
   removeCurrImage,
   removePublish,
+  removemyNotes,
   removeShareNotes,
   setAlertMsg,
   setCurrImage,

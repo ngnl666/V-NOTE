@@ -123,9 +123,12 @@ export default {
     const inputOptions = new Promise(resolve => {
       setTimeout(() => {
         resolve({
-          '0.jpg': "<img class='scenery' src='../src/assets/images/0.jpg'/>",
-          '1.jpg': "<img class='scenery' src='../src/assets/images/1.jpg'/>",
-          '2.jpg': "<img class='scenery' src='../src/assets/images/2.jpg'/>",
+          '0.jpg':
+            "<img class='scenery' src='https://firebasestorage.googleapis.com/v0/b/v-note-86a34.appspot.com/o/scenes%2F0.jpg?alt=media&token=5656169a-a745-47c0-8646-a01acc7fa868'/>",
+          '1.jpg':
+            "<img class='scenery' src='https://firebasestorage.googleapis.com/v0/b/v-note-86a34.appspot.com/o/scenes%2F1.jpg?alt=media&token=308023d2-0c14-4372-a44a-aec11975f616'/>",
+          '2.jpg':
+            "<img class='scenery' src='https://firebasestorage.googleapis.com/v0/b/v-note-86a34.appspot.com/o/scenes%2F2.jpg?alt=media&token=540e741f-fac2-48af-ae06-3671b8be2565'/>",
         });
       }, 1000);
     });

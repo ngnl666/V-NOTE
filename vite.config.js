@@ -5,6 +5,7 @@ import path from 'path';
 process.env = { ...process.env };
 export default defineConfig({
   plugins: [vue()],
+  base: '/V-NOTE/',
   API_KEY: process.env.VITE_API_KEY,
   AUTH_DOMAIN: process.env.VITE_AUTH_DOMAIN,
   PROJECT_ID: process.env.VITE_PROJECT_ID,

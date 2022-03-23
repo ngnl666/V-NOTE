@@ -42,7 +42,7 @@ const routes = [
       if (from.name === 'explore') {
         localStorage.setItem('isShowNextPage', false);
       }
-      if (from.name === 'all') {
+      if (from.name === 'all' || from.name === 'Home') {
         localStorage.setItem('isShowNextPage', true);
       }
     },

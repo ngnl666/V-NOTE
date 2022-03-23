@@ -82,7 +82,8 @@ export default {
     AlertMsg,
   },
   setup() {
-    const { setDarkMode, state, setAlertMsg, setUserInfo } = store;
+    const { setDarkMode, state, setAlertMsg, setUserInfo, removemyNotes } =
+      store;
     const router = useRouter();
 
     let darkmode = ref(JSON.parse(localStorage.getItem('darkmode')));
@@ -96,6 +97,7 @@ export default {
     const signOut = async () => {
       const res = await userSignOut();
       if (res.type === 'success') {
+        removemyNotes();
         setAlertMsg(res.type, res.msg);
         router.push({ name: 'login' });
       } else {

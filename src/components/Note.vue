@@ -168,7 +168,7 @@ export default {
 
     const note = reactive({
       _id: state.currNote._id || '',
-      uid: JSON.parse(localStorage.getItem('userInfo')).uid,
+      uid: JSON.parse(localStorage.getItem('userInfo'))?.uid || '',
       author: state.currNote.author || state.userInfo.displayName,
       title: state.currNote.title || '',
       content: state.currNote.content || '',

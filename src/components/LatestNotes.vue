@@ -39,11 +39,12 @@ export default {
       type: Object,
     },
   },
-  setup({ note }) {
+  setup(props) {
     const store = inject('store');
     const router = useRouter();
     const { state, addStar } = store;
 
+    const note = toRefs(props).note;
     const isFade = ref(false);
 
     const goToNote = id => {
