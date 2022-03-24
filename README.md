@@ -2,15 +2,19 @@
 
 ![V-NOTE](https://firebasestorage.googleapis.com/v0/b/v-note-86a34.appspot.com/o/scenes%2Fproject.png?alt=media&token=121c40b1-c96e-4644-bb0d-d8d8bbd5eec1)
 
-Demo Link: https://ngnl666.github.io/V-NOTE/#/
+[DEMO LINK](https://ngnl666.github.io/V-NOTE/#/)
 
 ## 簡介 Introduction
 
 ```
-使用 Vue.js 3 + Composition api 開發的技術文章發布網站
+📌 一個讓開發者撰寫並分享技術文章的應用程式
+Frontend : Vue.js 3 + Composition api
+Backend  : Express + MongoDB Atlas + Node.js
 ```
 
 ## 使用技術 Technologies
+
+> Frontend
 
 ▪️ Vue3 : Use Composition API
 
@@ -32,44 +36,55 @@ Demo Link: https://ngnl666.github.io/V-NOTE/#/
 
 ▪️ RWD : Responsive Website For Pad & Smartphone
 
+> Backend
+
+▪️ RESTful API : Intuitive & Clean URL
+
+▪️ Express MVC : Clear division & maintainability
+
+▪️ MongoDB Atlas : Use Mongsoose to query data and store in MongoDB's Cloud Database
+
 ## 套件 Extensions
 
-- axios
-- vue-loading-overlay
-- ESLint + Prettier
-- Bootstrap5
-- fontawesome
+> Frontend
+
 - animate.css
-- hover.css
-- sweetalert
+- axios
+- chart.js
+- ESLint + Prettier
+- sass
+- uuid
+- vitawind
+- vue-loading-overlay
+- vue-multiselect
+- vue-sweetalert2
+
+> Backend
+
+- body-parser
+- cors
+- dotenv
+- multer
+- nodemon
+- uuidv4
 
 ## 專案架構 Architecture
 
+> Frontend
+
 ### 📍 前台 :
 
-▪️ Home 首頁 : 網站介紹頁及咖啡特色介紹
+![V-NOTE](https://firebasestorage.googleapis.com/v0/b/v-note-86a34.appspot.com/o/scenes%2FV-NOTE%E6%9E%B6%E6%A7%8B%E5%9C%96.png?alt=media&token=5c4d3a9b-6790-4291-a252-d9c9874ad397)
 
-▪️ Shop 商品頁 : 各式各樣商品，可進行分類篩選、加入購物車、加入我的收藏、商品細節導覽
+### 📍 登入系統 :
 
-▪️ DetailCard 商品詳細頁 : 單一商品細節，可選擇數量並加入購物車、顯示目前所在分類及下方商品推薦
+![V-NOTE](https://firebasestorage.googleapis.com/v0/b/v-note-86a34.appspot.com/o/scenes%2FV-NOTE%E7%99%BB%E5%85%A5%E7%B3%BB%E7%B5%B1.png?alt=media&token=c44e7f68-43d1-4910-b498-46a8a73eef92)
 
-▪️ Favorite 我的收藏 : 放置我的收藏商品，以及我的優惠券
+> Backend [GitHub](https://github.com/ngnl666/V-NOTE-Backend)
 
-▪️ Pick 抽卡系統 : 抽取優惠券並存放置我的收藏頁面
+### 📍 DataBase(Models) & API :
 
-▪️ Cart 購物車 : 購物車系統，分為三個部分如下
-
-- CustomerCart : 檢視購物車內的商品，可進行數量更改與刪除
-- CustomerImformation : 個人資料填寫以及訂單確認
-- CustomerOrder : 訂單成立，進行付款
-
-### 📍 後台 :
-
-▪️ Login 登入系統 : 管理者後台，分為三個部份如下
-
-- ProductList : 管理商品詳細資訊，可進行增刪修改
-- Coupon : 管理優惠券，可進行增刪修改
-- Order : 管理訂單，查看每筆訂單詳細資訊
+![V-NOTE](https://firebasestorage.googleapis.com/v0/b/v-note-86a34.appspot.com/o/scenes%2FV-NOTE%20BACKEND.png?alt=media&token=52082778-fcf3-4db3-8a14-5c83df482e69)
 
 ## Project Setup
 
@@ -80,7 +95,7 @@ npm install
 ### Compiles and hot-reloads for development
 
 ```
-npm run serve
+npm run dev
 ```
 
 ### Compiles and minifies for production
@@ -98,4 +113,4 @@ npm run lint
 ## 聲明 Statement
 
 - 僅作為個人作品練習，所有資料皆來自網路，無商業用途
-- 圖片來源: Unsplash、Google、Starbucks、PCHome
+- 圖片來源: Unsplash、Google
