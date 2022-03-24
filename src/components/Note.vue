@@ -80,7 +80,10 @@
           >
         </label>
         <div class="bg-gray-400/30 rounded-lg flex space-x-4 pr-4 py-1">
-          <span class="noteUtility pl-4" @click="markup('bold')"
+          <span class="noteUtility pl-4" @click="markup('font')"
+            ><i class="fas fa-text-height"></i
+          ></span>
+          <span class="noteUtility" @click="markup('bold')"
             ><i class="fas fa-bold"></i
           ></span>
           <span class="noteUtility" @click="markup('underline')"

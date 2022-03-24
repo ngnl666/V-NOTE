@@ -9,6 +9,10 @@ const formatWord = (content, word, type) => {
   let tempCotent = content.split('');
 
   switch (type) {
+    case 'font':
+      tempCotent[word[0]] = `#(${tempCotent[word[0]]}`;
+      tempCotent[word[1]] = `${tempCotent[word[1]]})#`;
+      break;
     case 'bold':
       tempCotent[word[0]] = `*(${tempCotent[word[0]]}`;
       tempCotent[word[1]] = `${tempCotent[word[1]]})*`;
@@ -27,6 +31,8 @@ const formatWord = (content, word, type) => {
 
 const markup = content => {
   return content
+    .replaceAll('#(', '<div class="text-3xl">')
+    .replaceAll(')#', '</div>')
     .replaceAll('*(', '<span class="font-extrabold">')
     .replaceAll(')*', '</span>')
     .replaceAll('_(', '<span class="underline">')
