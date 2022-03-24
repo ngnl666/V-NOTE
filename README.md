@@ -16,19 +16,19 @@ Backend  : Express + MongoDB Atlas + Node.js
 
 > Frontend
 
-▪️ Vue3 : Use Composition API
+▪️ Vue3 : Use **Composition API**
 
 ▪️ Vite : Fastest build frontend tooling
 
-▪️ Vue Router4 : Navigation Guards、Async Components
+▪️ Vue Router4 : **Navigation Guards**、Async Components
 
-▪️ Tailwind CSS : Use JIT mode, Lightweight & Efficiency
+▪️ Tailwind CSS : Use **JIT** mode, Lightweight & Efficiency
 
 ▪️ Chart.js : Data visualization
 
-▪️ Firebase : Authentication & Image Storage
+▪️ Firebase : **Authentication** & Image Storage
 
-▪️ Intersection Observer API : Implement lazy-loading, bring more efficiency
+▪️ Intersection Observer API : Implement **lazy-loading & infinite scroll**, bring more efficiency
 
 ▪️ Markdown : Implement markdown like HackMD or Notion, Write your own doc prettily
 
@@ -80,11 +80,15 @@ Backend  : Express + MongoDB Atlas + Node.js
 
 ![V-NOTE](https://firebasestorage.googleapis.com/v0/b/v-note-86a34.appspot.com/o/scenes%2FV-NOTE%E7%99%BB%E5%85%A5%E7%B3%BB%E7%B5%B1.png?alt=media&token=c44e7f68-43d1-4910-b498-46a8a73eef92)
 
-> Backend [GitHub](https://github.com/ngnl666/V-NOTE-Backend)
+> Backend ([GitHub](https://github.com/ngnl666/V-NOTE-Backend))
 
-### 📍 DataBase(Models) & API :
+### 📍 Models & API :
 
 ![V-NOTE](https://firebasestorage.googleapis.com/v0/b/v-note-86a34.appspot.com/o/scenes%2FV-NOTE%20BACKEND.png?alt=media&token=52082778-fcf3-4db3-8a14-5c83df482e69)
+
+### 📍 Cloud Database :
+
+![V-NOTE](https://firebasestorage.googleapis.com/v0/b/v-note-86a34.appspot.com/o/scenes%2FV-NOTE%20DB.png?alt=media&token=e92812f7-b8c6-4788-9b62-b5c38612d6ac)
 
 ## Project Setup
 
