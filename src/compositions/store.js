@@ -303,7 +303,6 @@ const likedNote = async (id, status) => {
 };
 
 const publishNote = async data => {
-  state.loadingStatus.isLoading = true;
   const res = await _publishNote(data);
   if (!res) {
     setAlertMsg('error', '分享文章失敗！');
@@ -312,7 +311,6 @@ const publishNote = async data => {
   }
 
   getAllNote();
-  state.loadingStatus.isLoading = false;
 };
 
 const removePublish = async id => {

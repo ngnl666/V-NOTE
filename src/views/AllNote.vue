@@ -1,14 +1,5 @@
 <template>
   <div class="max-w-4xl mx-auto px-2 md:px-6">
-    <loading
-      v-model:active="loadingStatus.isLoading"
-      :can-cancel="true"
-      :is-full-page="loadingStatus.fullPage"
-      :blur="loadingStatus.blur"
-      :loader="loadingStatus.loader"
-      :color="loadingStatus.color"
-    />
-
     <div class="border border-gray-300 rounded-3xl p-8">
       <div class="mb-4 justify-between md:flex md:mb-8">
         <h2 class="pageTitle">文章列表</h2>
@@ -59,15 +50,12 @@
 </template>
 <script>
 import { computed, inject, ref, onMounted, toRefs } from 'vue';
-import Loading from 'vue-loading-overlay';
-import 'vue-loading-overlay/dist/vue-loading.css';
 
 import MyNotes from '@/components/MyNotes.vue';
 
 export default {
   name: 'AllNote',
   components: {
-    Loading,
     MyNotes,
   },
   setup() {

@@ -62,7 +62,7 @@
 </template>
 
 <script>
-import { inject, onMounted, reactive, ref } from 'vue';
+import { inject, onMounted, ref } from 'vue';
 import format from '../compositions/format.js';
 
 export default {
