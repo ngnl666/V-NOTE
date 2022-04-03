@@ -1,6 +1,6 @@
 <template>
   <div class="max-w-4xl mx-auto px-2 md:px-4">
-    <transition name="fade" mode="out-in">
+    <transition name="faded" mode="out-in">
       <slot name="btn" v-if="!isOpen"></slot>
       <slot name="note" v-else></slot>
     </transition>
@@ -25,22 +25,22 @@ export default {
 
 <style lang="scss">
 // animation
-.fade-enter-active,
-.fade-leave-active {
-  transition: all 1s;
+.faded-enter-active,
+.faded-leave-active {
+  transition: 1s;
 }
-.fade-enter-from,
-.fade-leave-to {
+.faded-enter-from,
+.faded-leave-to {
   opacity: 0;
 }
-.fade-enter-to,
-.fade-leave-from {
+.faded-enter-to,
+.faded-leave-from {
   opacity: 1;
 }
-.fade-leave-from {
+.faded-leave-from {
   transform: translateY(20%);
 }
-.fade-enter-from {
+.faded-enter-from {
   transform: translateY(20%);
 }
 </style>

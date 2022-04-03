@@ -151,7 +151,7 @@ export default {
   + .controlLabel {
     @apply w-20 h-9 text-lg block outline-none bg-white text-center rounded-3xl p-0.5
             relative cursor-pointer select-none shadow-xl;
-    transition: all 0.4s ease;
+    transition: 0.4s ease;
     border: 1px solid #e8eae9;
 
     &:before,

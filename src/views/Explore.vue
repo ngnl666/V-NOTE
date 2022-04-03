@@ -56,11 +56,19 @@ export default {
   },
   setup() {
     const store = inject('store');
-    const { state, getPaginate, setSelectedTags, removeShareNotes } = store;
+    const {
+      state,
+      getPaginate,
+      setSelectedTags,
+      setNewPost,
+      removeShareNotes,
+    } = store;
 
     let taggingSelected = ref([]);
     let taggingOptions = ref([]);
     let page = 0;
+    let target;
+    let timeout = null;
 
     const selectOption = op => {
       taggingSelected.value = [...new Set([...taggingSelected.value, op])];
@@ -82,12 +90,17 @@ export default {
     };
 
     const callback = async (entries, observer) => {
-      if (entries[0].isIntersecting && page) {
-        await getPaginate(page);
-        page++;
-        getOption();
+      if (timeout === null) {
+        if (entries[0].isIntersecting && page && state.newPost) {
+          await getPaginate(page);
+          page++;
+          getOption();
+
+          timeout = setTimeout(() => (timeout = null), 1000);
+        }
       }
     };
+
     const observer = new IntersectionObserver(callback, {
       threshold: 0,
       rootMargin: '10px',
@@ -100,7 +113,7 @@ export default {
     onMounted(async () => {
       await getPaginate(page);
       await getOption();
-      const target = document.querySelector('.sentinel');
+      target = document.querySelector('.sentinel');
       observer.observe(target);
       page++;
     });
@@ -108,6 +121,8 @@ export default {
     onUnmounted(() => {
       removeShareNotes();
       setSelectedTags([]);
+      setNewPost(true);
+      observer.unobserve(target);
     });
 
     return {

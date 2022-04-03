@@ -69,7 +69,7 @@
       </router-link>
     </div>
     <div class="shadow rounded-md p-4" v-else>
-      <div class="flex animate-pulse space-x-4">
+      <div class="animate-pulse flex space-x-4">
         <div class="h-12 w-12 bg-gray-400 rounded-full"></div>
         <div class="flex-1 space-y-4 py-1">
           <div class="h-4 w-3/4 bg-gray-400 rounded"></div>

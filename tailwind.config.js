@@ -485,6 +485,7 @@ module.exports = {
         },
       },
       pulse: {
+        '0%, 100%': {},
         '50%': {
           opacity: '.5',
         },

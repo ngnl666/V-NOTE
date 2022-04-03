@@ -35,6 +35,7 @@ const state = reactive({
   isOpen: false,
   isSort: false,
   isEdit: false,
+  newPost: true,
   keyword: '',
   showModal: false,
   loadingStatus: {
@@ -102,6 +103,8 @@ const setKeyword = word => (state.keyword = word);
 const setIsOpen = status => (state.isOpen = status);
 
 const setIsEdit = status => (state.isEdit = status);
+
+const setNewPost = status => (state.newPost = status);
 
 const setSelectedTags = tags => (state.selectedTags = tags);
 
@@ -280,11 +283,16 @@ const getOneNote = async id => {
 const getPaginate = async page => {
   state.loadingStatus.isLoading = true;
   const res = await _getPaginate(page);
+
   if (!res.data) {
     setAlertMsg('error', '取得文章列表失敗');
     state.loadingStatus.isLoading = false;
     return;
   }
+  if (!res.data.length) {
+    setNewPost(false);
+  }
+
   state.loadingStatus.isLoading = false;
   state.shareNotes = [...state.shareNotes, ...res.data];
 };
@@ -372,8 +380,9 @@ export default {
   setIsEdit,
   setIsLoading,
   setIsOpen,
-  setLikedNoteList,
   setKeyword,
+  setLikedNoteList,
+  setNewPost,
   setShowModal,
   setSelectedTags,
   sortMyNotes,
