@@ -1,0 +1,1 @@
+.faded-enter-active,.faded-leave-active{transition:1s}.faded-enter-from,.faded-leave-to{opacity:0}.faded-enter-to,.faded-leave-from{opacity:1}.faded-leave-from{transform:translateY(20%)}.faded-enter-from{transform:translateY(20%)}
